@@ -1,0 +1,91 @@
+{
+"skeleton": { "hash": "btmFQtBjfBMiyvu9A/Kx/mwIleQ", "spine": "2.1.05", "width": 0, "height": 0, "images": "" },
+"bones": [
+	{ "name": "root" },
+	{ "name": "Shoot", "parent": "root", "length": 30.7, "x": 0.61, "y": 2.44, "rotation": -0.45 },
+	{ "name": "lightbeam", "parent": "root", "length": 362.64, "x": 2.06, "y": 436.42, "rotation": -90 }
+],
+"slots": [
+	{ "name": "Shoot", "bone": "Shoot" },
+	{ "name": "blood1", "bone": "root" },
+	{ "name": "lightbeam", "bone": "lightbeam" }
+],
+"skins": {
+	"default": {
+		"Shoot": {
+			"shoot2": { "x": 42.45, "y": 2.4, "rotation": 0.45, "width": 103, "height": 23 },
+			"shoot3": { "x": 42.45, "y": 2.4, "rotation": 0.45, "width": 103, "height": 23 },
+			"shoot4": { "x": 42.45, "y": 2.4, "rotation": 0.45, "width": 103, "height": 23 },
+			"shoot5": { "x": 42.45, "y": 2.4, "rotation": 0.45, "width": 103, "height": 23 },
+			"shoot_1_1": { "x": 42.45, "y": 2.4, "rotation": 0.45, "width": 103, "height": 23 }
+		},
+		"blood1": {
+			"blood1": { "x": -17.08, "y": 5.24, "width": 47, "height": 62 },
+			"blood2": { "width": 47, "height": 62 },
+			"blood3": { "width": 47, "height": 62 },
+			"blood4": { "width": 47, "height": 62 },
+			"blood5": { "width": 47, "height": 62 },
+			"blood6": { "width": 47, "height": 62 }
+		},
+		"lightbeam": {
+			"lightbeam": { "x": 217.27, "y": 4.93, "rotation": 90, "width": 215, "height": 437 }
+		}
+	}
+},
+"animations": {
+	"Blood": {
+		"slots": {
+			"blood1": {
+				"attachment": [
+					{ "time": 0, "name": "blood2" },
+					{ "time": 0.0666, "name": "blood3" },
+					{ "time": 0.1333, "name": "blood4" },
+					{ "time": 0.2, "name": "blood5" },
+					{ "time": 0.2666, "name": "blood6" }
+				]
+			}
+		}
+	},
+	"Lightbeam": {
+		"slots": {
+			"lightbeam": {
+				"attachment": [
+					{ "time": 0, "name": "lightbeam" }
+				]
+			}
+		},
+		"bones": {
+			"lightbeam": {
+				"translate": [
+					{ "time": 0.1, "x": 0, "y": 0, "curve": "stepped" },
+					{ "time": 0.4, "x": 0, "y": 0 },
+					{ "time": 0.5333, "x": 0, "y": -435.96 }
+				],
+				"scale": [
+					{
+						"time": 0,
+						"x": 0,
+						"y": 1,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{ "time": 0.1, "x": 1, "y": 1, "curve": "stepped" },
+					{ "time": 0.4, "x": 1, "y": 1 },
+					{ "time": 0.5333, "x": 0, "y": 1 }
+				]
+			}
+		}
+	},
+	"shooting1": {
+		"slots": {
+			"Shoot": {
+				"attachment": [
+					{ "time": 0, "name": "shoot_1_1" },
+					{ "time": 0.0333, "name": "shoot2" },
+					{ "time": 0.0666, "name": "shoot5" },
+					{ "time": 0.1, "name": null }
+				]
+			}
+		}
+	}
+}
+}

@@ -1,0 +1,264 @@
+{"frames": {
+
+"blood1.png":
+{
+	"frame": {"x":88,"y":47,"w":22,"h":25},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":22,"h":25},
+	"sourceSize": {"w":22,"h":25},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"blood2.png":
+{
+	"frame": {"x":16,"y":47,"w":22,"h":25},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":22,"h":25},
+	"sourceSize": {"w":22,"h":25},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"blood3.png":
+{
+	"frame": {"x":64,"y":47,"w":22,"h":25},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":22,"h":25},
+	"sourceSize": {"w":22,"h":25},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"blood4.png":
+{
+	"frame": {"x":40,"y":47,"w":22,"h":25},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":22,"h":25},
+	"sourceSize": {"w":22,"h":25},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"dust1.png":
+{
+	"frame": {"x":2,"y":150,"w":77,"h":36},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":77,"h":36},
+	"sourceSize": {"w":77,"h":36},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"dust2.png":
+{
+	"frame": {"x":2,"y":112,"w":77,"h":36},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":77,"h":36},
+	"sourceSize": {"w":77,"h":36},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"dust3.png":
+{
+	"frame": {"x":2,"y":74,"w":77,"h":36},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":77,"h":36},
+	"sourceSize": {"w":77,"h":36},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"dust4.png":
+{
+	"frame": {"x":2,"y":188,"w":77,"h":36},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":77,"h":36},
+	"sourceSize": {"w":77,"h":36},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"dust5.png":
+{
+	"frame": {"x":2,"y":226,"w":77,"h":36},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":77,"h":36},
+	"sourceSize": {"w":77,"h":36},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"grass.png":
+{
+	"frame": {"x":2,"y":327,"w":104,"h":124},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":104,"h":124},
+	"sourceSize": {"w":104,"h":124},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"z2Chest2.png":
+{
+	"frame": {"x":2,"y":270,"w":23,"h":54},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":23,"h":54},
+	"sourceSize": {"w":23,"h":54},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"z2Head.png":
+{
+	"frame": {"x":81,"y":226,"w":38,"h":42},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":38,"h":42},
+	"sourceSize": {"w":38,"h":42},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"z2backarm.png":
+{
+	"frame": {"x":2,"y":14,"w":49,"h":11},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":49,"h":11},
+	"sourceSize": {"w":49,"h":11},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"z2forearm.png":
+{
+	"frame": {"x":58,"y":2,"w":17,"h":10},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":17,"h":10},
+	"sourceSize": {"w":17,"h":10},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"z2hand.png":
+{
+	"frame": {"x":39,"y":2,"w":17,"h":9},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":17,"h":9},
+	"sourceSize": {"w":17,"h":9},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"z2shou.png":
+{
+	"frame": {"x":95,"y":14,"w":24,"h":11},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":24,"h":11},
+	"sourceSize": {"w":24,"h":11},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"zBackArm.png":
+{
+	"frame": {"x":29,"y":27,"w":50,"h":13},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":13},
+	"sourceSize": {"w":50,"h":13},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"zChest.png":
+{
+	"frame": {"x":83,"y":270,"w":25,"h":55},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":25,"h":55},
+	"sourceSize": {"w":25,"h":55},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"zFoot.png":
+{
+	"frame": {"x":21,"y":2,"w":16,"h":6},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":6},
+	"sourceSize": {"w":16,"h":6},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"zFore.png":
+{
+	"frame": {"x":53,"y":14,"w":19,"h":11},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":19,"h":11},
+	"sourceSize": {"w":19,"h":11},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"zHand.png":
+{
+	"frame": {"x":74,"y":14,"w":19,"h":11},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":19,"h":11},
+	"sourceSize": {"w":19,"h":11},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"zHead.png":
+{
+	"frame": {"x":27,"y":270,"w":54,"h":54},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":54,"h":54},
+	"sourceSize": {"w":54,"h":54},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"zLeg.png":
+{
+	"frame": {"x":93,"y":27,"w":10,"h":15},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":10,"h":15},
+	"sourceSize": {"w":10,"h":15},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"zLeg2.png":
+{
+	"frame": {"x":81,"y":27,"w":10,"h":15},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":10,"h":15},
+	"sourceSize": {"w":10,"h":15},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"zShould.png":
+{
+	"frame": {"x":2,"y":27,"w":25,"h":12},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":25,"h":12},
+	"sourceSize": {"w":25,"h":12},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"zThigh.png":
+{
+	"frame": {"x":105,"y":27,"w":12,"h":18},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":12,"h":18},
+	"sourceSize": {"w":12,"h":18},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"zThigh2.png":
+{
+	"frame": {"x":2,"y":47,"w":12,"h":18},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":12,"h":18},
+	"sourceSize": {"w":12,"h":18},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"zfeet2.png":
+{
+	"frame": {"x":2,"y":2,"w":17,"h":6},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":17,"h":6},
+	"sourceSize": {"w":17,"h":6},
+	"pivot": {"x":0.5,"y":0.5}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "zombienazi.png",
+	"format": "RGBA8888",
+	"size": {"w":121,"h":455},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:5059614826b64b4ef44ea9201a89b17a:664eba7b3267dcf659d80a3510ba740f:8c88929f16701e04a1a0fa6001cd9874$"
+}
+}

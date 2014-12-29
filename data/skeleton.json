@@ -1,0 +1,37 @@
+{
+"skeleton": { "hash": "9Qmf+M59Fnc3vNvrlwGJxDNsaM4", "spine": "2.1.05", "width": 0, "height": 0, "images": "" },
+"bones": [
+	{ "name": "root" },
+	{ "name": "Shoot", "parent": "root", "length": 30.7, "x": 0.61, "y": 2.44, "rotation": -0.45 }
+],
+"slots": [
+	{ "name": "Shoot", "bone": "Shoot", "attachment": "shoot1" }
+],
+"skins": {
+	"default": {
+		"Shoot": {
+			"shoot1": { "x": 42.45, "y": 2.4, "rotation": 0.45, "width": 103, "height": 23 },
+			"shoot2": { "x": 42.45, "y": 2.4, "rotation": 0.45, "width": 103, "height": 23 },
+			"shoot3": { "x": 42.45, "y": 2.4, "rotation": 0.45, "width": 103, "height": 23 },
+			"shoot4": { "x": 42.45, "y": 2.4, "rotation": 0.45, "width": 103, "height": 23 },
+			"shoot5": { "x": 42.45, "y": 2.4, "rotation": 0.45, "width": 103, "height": 23 }
+		}
+	}
+},
+"animations": {
+	"animation": {
+		"slots": {
+			"Shoot": {
+				"attachment": [
+					{ "time": 0, "name": "shoot1" },
+					{ "time": 0.0333, "name": "shoot2" },
+					{ "time": 0.0666, "name": "shoot3" },
+					{ "time": 0.1, "name": "shoot4" },
+					{ "time": 0.1333, "name": "shoot5" },
+					{ "time": 0.1666, "name": null }
+				]
+			}
+		}
+	}
+}
+}

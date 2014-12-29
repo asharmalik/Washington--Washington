@@ -1,0 +1,66 @@
+{"frames": {
+
+"Fan.png":
+{
+	"frame": {"x":2,"y":2,"w":77,"h":77},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":77,"h":77},
+	"sourceSize": {"w":77,"h":77},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"HitArm.png":
+{
+	"frame": {"x":81,"y":2,"w":114,"h":74},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":114,"h":74},
+	"sourceSize": {"w":114,"h":74},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"HitBall.png":
+{
+	"frame": {"x":2,"y":81,"w":114,"h":114},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":114,"h":114},
+	"sourceSize": {"w":114,"h":114},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"HitCannon.png":
+{
+	"frame": {"x":2,"y":197,"w":183,"h":79},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":183,"h":79},
+	"sourceSize": {"w":183,"h":79},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"HitHead.png":
+{
+	"frame": {"x":2,"y":278,"w":272,"h":315},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":272,"h":315},
+	"sourceSize": {"w":272,"h":315},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"HitHead2.png":
+{
+	"frame": {"x":2,"y":595,"w":272,"h":315},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":272,"h":315},
+	"sourceSize": {"w":272,"h":315},
+	"pivot": {"x":0.5,"y":0.5}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "hitler.png",
+	"format": "RGBA8888",
+	"size": {"w":276,"h":912},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:12212820258fd12c531235e3ebc7c23c:7aa477b214c38e09332e48ddb8868576:10b4b3cec3ff10c2ac07fbdb4a9fd7dd$"
+}
+}

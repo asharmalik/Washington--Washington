@@ -1,0 +1,6 @@
+screen shake
+make enemies flash white on hit
+fix camera 
+finish boss fight
+shells
+rocket launcher for boss
