@@ -175,7 +175,7 @@ function George(hp){
 
         //Hit testing zombies
         for(var i =0;i<ZombiesManager.zombies.length;i++){
-            if(!ZombiesManager.zombies[i].dead){
+            if(!ZombiesManager.zombies[i].dead && !GameManager.debugMode){
                 if(Math.abs(this.y-ZombiesManager.zombies[i].y)<40 &&
                 (this.x<=ZombiesManager.zombies[i].x && this.x+this.speedX>=ZombiesManager.zombies[i].x|| this.x>=ZombiesManager.zombies[i].x && this.x+this.speedX<=ZombiesManager.zombies[i].x)){
                     this.speedX = 0;
@@ -348,7 +348,7 @@ function George(hp){
     this.shoot = function () {
         //sound
         if(this.gun == 0){//pistol
-            MapManager.shakeWorld(2, 200);
+            MapManager.shakeWorld(2, 150);
             GameSounds.playSound("pistol");
             this.x-=this.sprite.scale.x*2;
         }else if(this.gun == 1){//mg
@@ -357,7 +357,7 @@ function George(hp){
             this.x-=this.sprite.scale.x*2;
         }
         else if(this.gun == 2){//shotty
-            MapManager.shakeWorld(4, 250);
+            MapManager.shakeWorld(4, 200);
             GameSounds.playSound("shotgun");
             this.x-=this.sprite.scale.x*4;
         }
@@ -397,7 +397,7 @@ function George(hp){
         world.addChild(shooting);
 
 
-        //hittest
+        //hittest zombies
         if(!MapManager.proceedToBoss && !MapManager.bossFight) {
             var to_hit = this.gunhit;
 
@@ -439,8 +439,9 @@ function George(hp){
             }
         }
 
+        //hittest boss
         if(MapManager.hitler != null){//boss fight
-            if(this.y-MapManager.hitler.y>=-80){
+            if(this.y-MapManager.hitler.y>=-80 && ((george_char.sprite.scale.x == 1 && this.x<MapManager.hitler.x) || (george_char.sprite.scale.x == -1 && this.x>MapManager.hitler.x))){
                 GameSounds.metal.play();
                 MapManager.hitler.damage(this.gundmgs[this.gun]);
             }
@@ -496,7 +497,7 @@ function George(hp){
     }
     
     this.hit = function (dmg) {
-        if(this.dead)return;
+        if(this.dead || GameManager.debugMode)return;
         this.health-=dmg;
         if(this.pulseAlpha)return;
         this.pulseAlpha = true;

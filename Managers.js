@@ -6,6 +6,21 @@ GameSounds = {};
 
 GameManager = {};
 GameManager.stage1 = {};
+GameManager.debugMode = false;
+
+GameManager.toggleDebug = function () {
+    GameManager.debugMode = !GameManager.debugMode;
+
+    if (GameManager.debugMode) {
+        stage.addChild(fps_txt);
+        george_char.acc = 6;
+        george_char.jumpHeight = -24;
+        MapManager.randomLength = 4000;//30000
+        MapManager.bridgeFinaleLength = 1000;
+    } else {
+        stage.removeChild(fps_txt);
+    }
+}
 
 GameManager.beginGame1 = function(){
     PlatformManager.reset();
@@ -28,9 +43,8 @@ GameManager.beginGame1 = function(){
 
     //add fps text
     fps_txt = new PIXI.Text("FPS: x", {font:"12px Arial", fill:"white"});
-    //stage.addChild(fps_txt);
 
-
+    GameManager.toggleDebug();
     requestAnimFrame(GameManager.stage1.step);
 }
 
@@ -701,12 +715,12 @@ MapManager.reset = function(){//better name restart?
     MapManager.finale = false;
     MapManager.atBridge = false;
     MapManager.onElevator = false;
-    MapManager.bridgeFinaleLength = 2000;//30 seconds
+    MapManager.bridgeFinaleLength = 15000;//30 seconds
     MapManager.proceedToBoss = false;
     MapManager.focusRight = false;
     MapManager.elevator = null;
     MapManager.bossFight = false;
-    MapManager.randomLength = 4000;//30000
+    MapManager.randomLength = 30000;//length in pixels of first stage
     MapManager.cameraLeftX = 0;
     MapManager.cameraRightX = 0;
     MapManager.hitler = null;

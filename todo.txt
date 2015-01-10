@@ -5,7 +5,9 @@ Gun
 
 make enemies flash white on hit
 shells
-make a debug = true variable somewhere
+Fix SoundManager and all sounds
+Add preloader - sound
+Melee sound doubles when hitting multiple zombies
 
 bugs:
-hit sound on wrong direction shooting
+Boss punch doesnt do y hit deteciton
