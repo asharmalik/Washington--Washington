@@ -1,6 +1,11 @@
-screen shake
+Boss fight:
+Mustache flash red on hit
+collision with boss
+Gun
+
 make enemies flash white on hit
-fix camera 
-finish boss fight
 shells
-rocket launcher for boss
+make a debug = true variable somewhere
+
+bugs:
+hit sound on wrong direction shooting

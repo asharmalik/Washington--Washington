@@ -49,7 +49,6 @@ GameManager.stage1.step = function () {
 
     //Handle "Camera" coordinates
     var cameraX = -(george_char.leftLimit+300)+stageWidth/2;
-    var cameraY = 0;
 
     if(MapManager.proceedToBoss) {
         cameraX = -(george_char.x + 300) + stageWidth / 2;
@@ -67,15 +66,14 @@ GameManager.stage1.step = function () {
     if(cameraX>0) cameraX = 0;
 
     world.x+=Math.round((cameraX-world.x)/15);
-    //world.y+=Math.round((cameraY-world.y)/15);
-    world.y = (world.y + (cameraY-world.y)/15);
-    //simulate shaking
+    world.y = (world.y + (MapManager.cameraY-world.y)/15);
 
+    //simulate shaking------------------
     if(MapManager.shakeMagnitude != 0) {
         var shakeX = Math.random() * MapManager.shakeMagnitude * 2 - MapManager.shakeMagnitude;
-        var shakeY = Math.random() * MapManager.shakeMagnitude * 2 - MapManager.shakeMagnitude;
+        var shakeY = Math.random() * MapManager.shakeMagnitude;
         world.x += shakeX;
-        world.y += shakeX;
+        world.y += shakeY;
 
         MapManager.layer0.x += shakeX;
         MapManager.layer2.x += shakeX;
@@ -84,12 +82,20 @@ GameManager.stage1.step = function () {
         MapManager.layer5.x += shakeX;
     }
 
-    //add world shake
+    //keep layers attached b/c of shaking
     MapManager.layer0.y = world.y;
-    MapManager.layer2.y = world.y;
+
+    if(!MapManager.onElevator && !MapManager.bossFight) {
+        MapManager.layer2.y = world.y;
+    }else{
+        MapManager.layer2.y = world.y + 850;
+    }
+
     MapManager.layer3.y = world.y;
     MapManager.layer4.y = world.y;
     MapManager.layer5.y = world.y;
+
+    //-----------------------------------
 
     //could add y dimension too (maybe taller maps somewhere along the point?
 
@@ -549,13 +555,13 @@ MapManager.elevatorRide = function () {//begin elevator ride
         MapManager.layer2.removeChildAt(0);
     }
 
-    MapManager.layer2.visible = true;
+    MapManager.layer2.visible = true;//layer2 is where the bg for the boss fight is
 
     //build bg
     PlatformManager.platforms = [];//erase all platforms
     PlatformManager.addPlatform(7000, 99999,1402);//create boss platforms
 
-    for(i =0;i<2;i++) {
+    for(i =0;i<2;i++) {//2
         var sprite = PIXI.Sprite.fromFrame("Trees.png")
 
         //sprite.x = george_char.x-400;
@@ -577,6 +583,7 @@ MapManager.elevatorStep = function () {
 
     if(george_char.y>1400){//elevator land
         MapManager.bossFight = true;
+        MapManager.onElevator = false;
         george_char.acc = 2;//move again
         george_char.y = 1400;
         PlatformManager.freeze = false;
@@ -590,7 +597,7 @@ MapManager.elevatorStep = function () {
         MapManager.spawnBoss();
         return;
     }
-    world.y-=10;
+    MapManager.cameraY-=10; //world.y-=10;
     george_char.y+=10;
     PlatformManager.freeze = true;
     if(MapManager.elevator != null){
@@ -605,7 +612,8 @@ MapManager.step = function(){
         world.setChildIndex(MapManager.layer1, world.children.length -1);
     }
     if(MapManager.onElevator){
-        MapManager.layer2.y = world.y/5 ;
+        MapManager.layer2.y-=2;
+        if(MapManager.layer2.y<=-150) MapManager.layer2.y = -150;
     }
 
     if(!MapManager.bossFight) {
@@ -643,8 +651,9 @@ MapManager.step = function(){
         george_char.rightLimit = MapManager.proccessedX+150;
         MapManager.focusRight = true;
     }
-    if(MapManager.bossFight){
+    if(MapManager.bossFight){//Map handling only during boss fight. Once goerge is off elevator
         MapManager.hitler.step();
+
     }
 
 }
@@ -653,7 +662,9 @@ MapManager.shakeDone = function () {
     MapManager.shakeMagnitude = 0;
     MapManager.layer0.y = 0;
     MapManager.layer1.y = 0;
-    MapManager.layer2.y = 0;
+    if(!MapManager.bossFight && !MapManager.onElevator) {
+        MapManager.layer2.y = 0;
+    }
     MapManager.layer3.y = 0;
     MapManager.layer4.y = 0;
     MapManager.layer5.y =  0;
@@ -690,16 +701,17 @@ MapManager.reset = function(){//better name restart?
     MapManager.finale = false;
     MapManager.atBridge = false;
     MapManager.onElevator = false;
-    MapManager.bridgeFinaleLength = 30000;//30 seconds
+    MapManager.bridgeFinaleLength = 2000;//30 seconds
     MapManager.proceedToBoss = false;
     MapManager.focusRight = false;
     MapManager.elevator = null;
     MapManager.bossFight = false;
-    MapManager.randomLength = 15000;//30000
+    MapManager.randomLength = 4000;//30000
     MapManager.cameraLeftX = 0;
     MapManager.cameraRightX = 0;
     MapManager.hitler = null;
     MapManager.shakeMagnitude = 0;
+    MapManager.cameraY = 0;
 
     //initialization
     var moon = PIXI.Sprite.fromFrame("Moon.png");

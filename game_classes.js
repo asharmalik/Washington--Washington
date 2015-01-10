@@ -57,7 +57,7 @@ function George(hp){
     this.attacking = false;
     this.speedX = 0;
     this.acc = 2;
-    this.maxSpeed = 6;//6
+    this.maxSpeed = 30;//6
     this.friction = .8;//.8
     this.leftLimit = 40;
     this.jumpFreeze = false;
