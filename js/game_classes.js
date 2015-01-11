@@ -51,14 +51,14 @@ function George(hp){
     this.setSprite("data/George.json");
     this.health = hp;
     this.maxHealth = hp;
-    this.jumpHeight = -16;//-20
+    this.jumpHeight = -16;
     this.onPlatform = false;
     this.walking = false;
     this.attacking = false;
     this.speedX = 0;
     this.acc = 2;
-    this.maxSpeed = 30;//6
-    this.friction = .8;//.8
+    this.maxSpeed = 6;
+    this.friction = .8;
     this.leftLimit = 40;
     this.jumpFreeze = false;
     this.kbrange = 40;
@@ -213,7 +213,7 @@ function George(hp){
         if(!this.attacking && Key.isDown(90)){
             this.walking = false;
             this.attacking = true;
-            GameSounds.melee.play();
+            GameSounds.playSound('swing')
             id = Math.round(Math.random()*1+1);
             this.sprite.state.setAnimationByName("Melee"+id, false);
             var that = this;
@@ -237,7 +237,7 @@ function George(hp){
             }
 
             if(contactMade){
-                GameSounds.playSound("melee");
+                //GameSounds.playSound("melee");
             }
         }
 
@@ -255,20 +255,19 @@ function George(hp){
         if(Key.isDown(88) && !this.attacking) {
             if (!this.shooting && !this.walking && !this.inAir) {//Idle
                 this.walking = false;
-                //this.attacking = true;
+                this.attacking = true;
                 this.shooting = true;
 
                 if(this.gun == 0 || this.gun == 2) {
                     this.sprite.state.setAnimationByName("Shooting", false);
                     this.sprite.skeleton.setBonesToSetupPose();
                 }
-                //this.sprite.skeleton.setBonesToSetupPose();
-                //change speed based on shooting delay
 
                 var that = this;
                 setTimeout(function () {
                     that.attackDone();
                     that.shooting = false;
+                    this.attacking = false;
                 }, this.shootDelay);
                 this.shoot();
             }
@@ -353,7 +352,7 @@ function George(hp){
             this.x-=this.sprite.scale.x*2;
         }else if(this.gun == 1){//mg
             MapManager.shakeWorld(3, 100);
-            GameSounds.playSound("mgun");
+            GameSounds.playSound("mg");
             this.x-=this.sprite.scale.x*2;
         }
         else if(this.gun == 2){//shotty
@@ -442,7 +441,7 @@ function George(hp){
         //hittest boss
         if(MapManager.hitler != null){//boss fight
             if(this.y-MapManager.hitler.y>=-80 && ((george_char.sprite.scale.x == 1 && this.x<MapManager.hitler.x) || (george_char.sprite.scale.x == -1 && this.x>MapManager.hitler.x))){
-                GameSounds.metal.play();
+                GameSounds.playSound('metal');
                 MapManager.hitler.damage(this.gundmgs[this.gun]);
             }
         }

@@ -12,7 +12,7 @@ var assets = ["data/nazi.json", "data/nazipacked.json", "data/George.json", "dat
 
 loader = new PIXI.AssetLoader(assets, false);
 
-loader.onComplete = onAssetsLoaded;
+//loader.onComplete = onAssetsLoaded;
 loader.onProgress = onProgress;
 loader.load();
 
@@ -22,11 +22,24 @@ var lastLoop = new Date;
 var fps_txt;
 var loading_txt = new PIXI.Text("[0%]", {font:"42px Arial", fill:"white"});
 var george_char;
+var perc_assets_loaded = 0;
+var perc_loaded = 0;
+var displayed_perc = 0;
 
 loading_txt.x = stageWidth/2 - loading_txt.width/2;
 loading_txt.y = stageHeight/2 - loading_txt.height;
 
 stage.addChild(loading_txt);
+
+soundManager.onerror = function () {
+    console.log("SoundManager error!");
+    GameSounds.forceMute = true;
+}
+
+soundManager.onload = function () {
+    GameSounds.init();//begin loading sounds once soundManager has init.
+}
+
 
 //focus
 renderer.view.setAttribute('tabindex','0');
@@ -35,6 +48,9 @@ renderer.view.focus();
 renderer.view.addEventListener('click', function() {
     renderer.view.focus();
 }, false);
+
+requestAnimationFrame(update_loader);
+
 
 //prevent space and arrow keys
 window.addEventListener("keydown", function(e) {
@@ -47,16 +63,27 @@ function onAssetsLoaded()
 {
     stage.removeChild(loading_txt);
     GameManager.beginGame1();
-    GameSounds.init();
-    //GameSounds.theme.play();
+    GameSounds.beginThemeSong();
 }
 
 function onProgress(){
-    var percent = Math.round((assets.length - loader.loadCount) / assets.length * 100 * 100)/100;
+    perc_assets_loaded = (assets.length - loader.loadCount) / assets.length * 100; //update real-time percent
+}
 
-    loading_txt.setText("["+percent+"%]");
+function update_loader(){
+    perc_loaded = (perc_assets_loaded+GameSounds.perc_loaded)/2;
+    while(displayed_perc<perc_loaded) displayed_perc+=1;
+
+    loading_txt.setText("["+displayed_perc+"%]");
     loading_txt.x = stageWidth/2 - loading_txt.width/2;
     renderer.render(stage);
+
+    if(displayed_perc > 95 && perc_loaded == 100){
+        onAssetsLoaded();
+        return;
+    }
+
+    requestAnimationFrame(update_loader);
 }
 
 // george_char.sprite.skeleton.setSkin()

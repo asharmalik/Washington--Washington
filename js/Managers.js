@@ -14,10 +14,13 @@ GameManager.toggleDebug = function () {
     if (GameManager.debugMode) {
         stage.addChild(fps_txt);
         george_char.acc = 6;
+        george_char.maxSpeed = 30;
         george_char.jumpHeight = -24;
         MapManager.randomLength = 4000;//30000
         MapManager.bridgeFinaleLength = 1000;
+        GameSounds.muteThemeSong = true;
     } else {
+        GameSounds.muteThemeSong = false;
         stage.removeChild(fps_txt);
     }
 }
@@ -26,7 +29,7 @@ GameManager.beginGame1 = function(){
     PlatformManager.reset();
     george_char = new George(100);
 
-    george_char.x = 400;
+    george_char.x = 300;
     george_char.y = 300;
 
     ZombiesManager.reset();
@@ -70,7 +73,6 @@ GameManager.stage1.step = function () {
         cameraX = -(george_char.x + 150) + stageWidth / 2;
     } else if(MapManager.bossFight){
         var cameraX = -(george_char.x)+stageWidth/2;
-        //console.log(cameraX, MapManager.cameraLeftX, MapManager.cameraRightX);
 
         if(cameraX>MapManager.cameraLeftX) cameraX = MapManager.cameraLeftX;
         if(cameraX<MapManager.cameraRightX) cameraX = MapManager.cameraRightX;
@@ -904,118 +906,64 @@ UIManager.createBossBar = function () {
 }
 
 GameSounds.playSound = function (snd) {
-    var sound;
-
-
-    if (snd == "shotgun") {
-        //sound = new Audio("sound/shotgun.wav");
-        GameSounds.shotgun.play();
-    }else if(snd == "mgun"){
-        //sound = new Audio("sound/mgun.wav");
-        GameSounds.mg.play();
-    }else if(snd == "pistol"){
-        //sound = new Audio("sound/pistol.wav");
-        GameSounds.pistol.play();
-    }else if(snd == "melee"){
-        GameSounds.melee.play();
-        //sound = new Audio("sound/melee.wav");
-    }
-    //respawn
-    //gw_die
-    if(sound != null)
-        sound.play();
+    if(GameSounds.muted || GameSounds.forceMute)return;
+    soundManager.play(snd);
 }
 
 GameSounds.init = function () {
-    GameSounds.shotgun = soundManager.createSound({
-        url: 'sound/Shotgun.ogg'
-    });
+    GameSounds.soundsLoaded = 0;
+    GameSounds.forceMute = false; //if soundManager fails
+    GameSounds.perc_loaded = 0;
+    GameSounds.muted = false;
+    GameSounds.muteThemeSong = false;
+    GameSounds.sounds = [
+        {id:'shotgun', url:'sound/SFX_Shotgun.ogg'},
+        {id:'pistol', url:'sound/SFX_Gun.ogg'},
+        {id: 'mg', url: 'sound/SFX_MGun.ogg'},
+        {id: 'swing', url: 'sound/SFX_Swish.ogg'},
+        {id: 'metal', url: 'sound/SFX_Metal.ogg'},
+        {id: 'theme', url: 'sound/Theme.ogg'},
+        {id: 'german1', url: 'sound/Boss_apfelsaft.ogg'},
+        {id: 'german2', url: 'sound/Boss_Nein.ogg'},
+        {id: 'german3', url: 'sound/Boss_YA.ogg'},
+        {id: 'german4', url: 'sound/Boss_Shukrut.ogg'},
+        {id: 'george1', url: 'sound/George_GeorgeWashington.ogg'},
+        {id: 'george2', url: 'sound/George_ImGeorge.ogg'},
+        {id: 'george3', url: 'sound/George_ImGeorgeWashington.ogg'},
+        {id: 'george4', url: 'sound/George_Tastethepowerofgeorge.ogg'},
+        {id: 'zombie1', url: 'sound/Zombie_Brains.ogg'},
+        {id: 'zombie2', url: 'sound/Zombie_raarg.ogg'},
+        {id: 'zombie3', url: 'sound/Zombie_Kill.ogg'}
+    ];
 
-    GameSounds.pistol = soundManager.createSound({
-        url: 'sound/Gun.ogg'
-    });
+    for(var i = 0;i<GameSounds.sounds.length;i++){//enumerate through list and load all sounds
+        GameSounds[GameSounds.sounds[i].id] = soundManager.createSound({
+            id: GameSounds.sounds[i].id,
+            url: GameSounds.sounds[i].url
+        });
 
-    GameSounds.mg = soundManager.createSound({
-        url: 'sound/MGun.ogg'
-    });
-
-    GameSounds.melee = soundManager.createSound({
-        url: 'sound/SFX_Swish.ogg'
-    });
-
-    GameSounds.metal = soundManager.createSound({
-        url: 'sound/SFX_Metal.ogg'
-    });
-
-    GameSounds.theme = soundManager.createSound({
-        url: 'sound/Theme.ogg'
-    });
-
-    GameSounds.german1 = soundManager.createSound({
-        url: 'sound/Voice_apfelsaft.ogg'
-    });
-
-    GameSounds.german2 = soundManager.createSound({
-        url: 'sound/Voice_Nein.ogg'
-    });
-
-    GameSounds.german3 = soundManager.createSound({
-        url: 'sound/Voice_YA.ogg'
-    });
-
-    GameSounds.german4 = soundManager.createSound({
-        url: 'sound/Voice_Shukrut.ogg'
-    });    
-
-    GameSounds.george1 = soundManager.createSound({
-        url: 'sound/Voice_GeorgeWashington.ogg'
-    });    
-    GameSounds.george2 = soundManager.createSound({
-        url: 'sound/Voice_ImGeorge.ogg'
-    });    
-    GameSounds.george3 = soundManager.createSound({
-        url: 'sound/Voice_ImGeorgeWashington.ogg'
-    });    
-    GameSounds.george4 = soundManager.createSound({
-        url: 'sound/Voice_Tastethepowerofgeorge.ogg'
-    });    
-    GameSounds.zombie1 = soundManager.createSound({
-        url: 'sound/Voice_Brains.ogg'
-    });    
-    GameSounds.zombie2 = soundManager.createSound({
-        url: 'sound/Voice_raarg.ogg'
-    });    
-    GameSounds.zombie3 = soundManager.createSound({
-        url: 'sound/Voice_Kill.ogg'
-    });    
+        GameSounds[GameSounds.sounds[i].id].load({onload: function () {
+            GameSounds.soundsLoaded+=1;
+            GameSounds.perc_loaded = GameSounds.soundsLoaded/GameSounds.sounds.length*100;
+        }})
+    }
 
     var that = this;
     //setTimeout(function(){that.playRandom()}, 20000);
 }
 
-GameSounds.playRandom = function () {
-    /*german1-4
-    george1-4
-    zombie1-3*/
-    var id = Math.round(Math.random()*4);
-
-    if(id == 0){
-        GameSounds.george1.play();
-    }else if(id == 1){
-        GameSounds.george2.play();
+GameSounds.mute = function () {
+    GameSounds.muted = !GameSounds.muted;
+    if(GameSounds.muted){
+        soundManager.mute();//mute all sounds;
+    }else{
+        //begin theme song
+        GameSounds.beginThemeSong();
     }
-    else if(id == 2){
+}
 
-    }
-    else if(id == 3){
+GameSounds.beginThemeSong = function () {
+    if(GameSounds.muted || GameSounds.forceMute || GameSounds.muteThemeSong) return;
 
-    }
-    else if(id == 4){
-
-    }
-
-
-
-    var that = this;
-    setTimeout(function(){that.playRandom()}, 4000);
+    soundManager.play('theme', {onfinish: GameSounds.beginThemeSong}); //replay theme song when ended
 }

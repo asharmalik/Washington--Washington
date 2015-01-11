@@ -6,8 +6,10 @@ Gun
 make enemies flash white on hit
 shells
 Fix SoundManager and all sounds
-Add preloader - sound
-Melee sound doubles when hitting multiple zombies
+Add mute button
+Add mobile capabilities..? Maybe auto play mode or figure our controls
+Spine wrapper?
+fix shotgun volume
 
 bugs:
 Boss punch doesnt do y hit deteciton
