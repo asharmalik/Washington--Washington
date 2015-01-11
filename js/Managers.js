@@ -48,7 +48,7 @@ GameManager.beginGame1 = function(){
     //add fps text
     fps_txt = new PIXI.Text("FPS: x", {font:"12px Arial", fill:"white"});
 
-    GameManager.toggleDebug();
+    //GameManager.toggleDebug();
     requestAnimFrame(GameManager.stage1.step);
 }
 
@@ -920,6 +920,14 @@ GameSounds.__defineSetter__('ambientZombie', function (bool) {
     }
 });
 
+GameSounds.__defineSetter__('ambientGeorge', function (bool) {
+    if(bool){
+        GameSounds.ambientGeorgeTimer = setTimeout(GameSounds.playAmbientGeorge, GameSounds.ambientGeorgeDelay)
+    }else if(GameSounds.ambientGeorgeTimer != null){
+        clearTimeout(GameSounds.ambientGeorgeTimer);
+    }
+});
+
 GameSounds.playAmbientZombie = function () {
     var id = Math.round(Math.random()*2) + 1;
 
@@ -928,9 +936,19 @@ GameSounds.playAmbientZombie = function () {
     GameSounds.ambientZombieTimer = setTimeout(GameSounds.playAmbientZombie, GameSounds.ambientZombieDelay)
 }
 
+GameSounds.playAmbientGeorge = function () {
+    var id = Math.round(Math.random()*1) + 1;
+
+    GameSounds.playSound('george'+id);
+
+    GameSounds.ambientZombieTimer = setTimeout(GameSounds.playAmbientGeorge, GameSounds.ambientGeorgeDelay)
+}
+
 GameSounds.init = function () {
     GameSounds.ambientZombie = false;
+    GameSounds.ambientGeorge = true;
     GameSounds.ambientZombieDelay = 8000;
+    GameSounds.ambientGeorgeDelay = 15000;
     GameSounds.soundsLoaded = 0;
     GameSounds.forceMute = false; //if soundManager fails
     GameSounds.perc_loaded = 0;

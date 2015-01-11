@@ -14,3 +14,4 @@ bg disappeared for boss fight
 
 bugs:
 Boss punch doesnt do y hit deteciton
+fix voice overlap during death?

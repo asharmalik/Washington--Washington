@@ -210,7 +210,7 @@ function George(hp){
         }
 
         //Melee
-        if(!this.attacking && Key.isDown(90)){
+        if(!this.attacking && !this.shooting && Key.isDown(90)){
             this.walking = false;
             this.attacking = true;
             GameSounds.playSound('swing')
@@ -256,7 +256,6 @@ function George(hp){
         if(Key.isDown(88) && !this.attacking) {
             if (!this.shooting && !this.walking && !this.inAir) {//Idle
                 this.walking = false;
-                this.attacking = true;
                 this.shooting = true;
 
                 if(this.gun == 0 || this.gun == 2) {
@@ -268,7 +267,6 @@ function George(hp){
                 setTimeout(function () {
                     that.attackDone();
                     that.shooting = false;
-                    this.attacking = false;
                 }, this.shootDelay);
                 this.shoot();
             }
