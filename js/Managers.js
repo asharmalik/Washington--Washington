@@ -34,6 +34,7 @@ GameManager.beginGame1 = function(){
 
     ZombiesManager.reset();
     MapManager.reset();
+    GameSounds.ambientZombie = true;
 
     PlatformManager.addPlatform(-999, 99999, 402);
     UIManager.createUI();
@@ -535,7 +536,7 @@ MapManager.manageMap = function() {//called every so often to build the map ahea
 MapManager.stopBridgeFinale = function () {
     ZombiesManager.maxZombies = 0;
     MapManager.proceedToBoss = true;
-
+    GameSounds.ambientZombie = false;
 }
 
 MapManager.fadeInPrepForElevator = function (){ //fades layer3 and 4
@@ -907,10 +908,29 @@ UIManager.createBossBar = function () {
 
 GameSounds.playSound = function (snd) {
     if(GameSounds.muted || GameSounds.forceMute)return;
+
     soundManager.play(snd);
 }
 
+GameSounds.__defineSetter__('ambientZombie', function (bool) {
+    if(bool){
+        GameSounds.ambientZombieTimer = setTimeout(GameSounds.playAmbientZombie, GameSounds.ambientZombieDelay)
+    }else if(GameSounds.ambientZombieTimer != null){
+        clearTimeout(GameSounds.ambientZombieTimer);
+    }
+});
+
+GameSounds.playAmbientZombie = function () {
+    var id = Math.round(Math.random()*2) + 1;
+
+    GameSounds.playSound('zombie'+id);
+
+    GameSounds.ambientZombieTimer = setTimeout(GameSounds.playAmbientZombie, GameSounds.ambientZombieDelay)
+}
+
 GameSounds.init = function () {
+    GameSounds.ambientZombie = false;
+    GameSounds.ambientZombieDelay = 8000;
     GameSounds.soundsLoaded = 0;
     GameSounds.forceMute = false; //if soundManager fails
     GameSounds.perc_loaded = 0;
@@ -931,10 +951,10 @@ GameSounds.init = function () {
         {id: 'george1', url: 'sound/George_GeorgeWashington.ogg'},
         {id: 'george2', url: 'sound/George_ImGeorge.ogg'},
         {id: 'george3', url: 'sound/George_ImGeorgeWashington.ogg'},
-        {id: 'george4', url: 'sound/George_Tastethepowerofgeorge.ogg'},
-        {id: 'zombie1', url: 'sound/Zombie_Brains.ogg'},
+        {id: 'respawn', url: 'sound/George_Tastethepowerofgeorge.ogg'},
+        {id: 'zombie1', url: 'sound/Zombie_Kill.ogg'},
         {id: 'zombie2', url: 'sound/Zombie_raarg.ogg'},
-        {id: 'zombie3', url: 'sound/Zombie_Kill.ogg'}
+        {id: 'zombie3', url: 'sound/Zombie_Brains.ogg'}
     ];
 
     for(var i = 0;i<GameSounds.sounds.length;i++){//enumerate through list and load all sounds
@@ -968,3 +988,4 @@ GameSounds.beginThemeSong = function () {
 
     soundManager.play('theme', {onfinish: GameSounds.beginThemeSong}); //replay theme song when ended
 }
+
