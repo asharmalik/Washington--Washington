@@ -722,7 +722,7 @@ MapManager.reset = function(){//better name restart?
     MapManager.focusRight = false;
     MapManager.elevator = null;
     MapManager.bossFight = false;
-    MapManager.randomLength = 30000;//length in pixels of first stage
+    MapManager.randomLength = 15000;//length in pixels of first stage
     MapManager.cameraLeftX = 0;
     MapManager.cameraRightX = 0;
     MapManager.hitler = null;
@@ -921,6 +921,7 @@ GameSounds.init = function () {
         {id:'pistol', url:'sound/SFX_Gun.ogg'},
         {id: 'mg', url: 'sound/SFX_MGun.ogg'},
         {id: 'swing', url: 'sound/SFX_Swish.ogg'},
+        {id: 'punch', url:'sound/SFX_Punch.ogg'},
         {id: 'metal', url: 'sound/SFX_Metal.ogg'},
         {id: 'theme', url: 'sound/Theme.ogg'},
         {id: 'german1', url: 'sound/Boss_apfelsaft.ogg'},

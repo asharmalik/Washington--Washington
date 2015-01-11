@@ -10,6 +10,7 @@ Add mute button
 Add mobile capabilities..? Maybe auto play mode or figure our controls
 Spine wrapper?
 fix shotgun volume
+bg disappeared for boss fight
 
 bugs:
 Boss punch doesnt do y hit deteciton

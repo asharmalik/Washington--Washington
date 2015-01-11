@@ -237,7 +237,8 @@ function George(hp){
             }
 
             if(contactMade){
-                //GameSounds.playSound("melee");
+                //play melee hit sound
+                GameSounds.playSound('punch');
             }
         }
 
@@ -345,7 +346,7 @@ function George(hp){
     }
 
     this.shoot = function () {
-        //sound
+        //sound & shake-----------------------------------------
         if(this.gun == 0){//pistol
             MapManager.shakeWorld(2, 150);
             GameSounds.playSound("pistol");
@@ -361,8 +362,7 @@ function George(hp){
             this.x-=this.sprite.scale.x*4;
         }
 
-
-        //add muzzle fire effect
+        //add muzzle fire effect-------------------------------
         var shooting = new PIXI.Spine("data/effects.json");
         shooting.state.setAnimationByName("shooting1", true);
 
