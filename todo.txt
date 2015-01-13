@@ -5,13 +5,14 @@ Gun
 
 make enemies flash white on hit
 shells
-Fix SoundManager and all sounds
 Add mute button
 Add mobile capabilities..? Maybe auto play mode or figure our controls
 Spine wrapper?
 fix shotgun volume
 bg disappeared for boss fight
+mobile: game never loads past 56%
 
 bugs:
 Boss punch doesnt do y hit deteciton
 fix voice overlap during death?
+get rid of definegetter and setter functions (IE does not support)

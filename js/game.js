@@ -31,9 +31,13 @@ loading_txt.y = stageHeight/2 - loading_txt.height;
 
 stage.addChild(loading_txt);
 
+soundManager.useHTML5Audio = true;
+//soundManager.preferFlash = false;//false??
+
 soundManager.onerror = function () {
     console.log("SoundManager error!");
     GameSounds.forceMute = true;
+    GameSounds.perc_loaded = 100;
 }
 
 soundManager.onload = function () {

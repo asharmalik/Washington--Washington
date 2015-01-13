@@ -975,7 +975,13 @@ GameSounds.init = function () {
         {id: 'zombie3', url: 'sound/Zombie_Brains.ogg'}
     ];
 
-    for(var i = 0;i<GameSounds.sounds.length;i++){//enumerate through list and load all sounds
+    GameSounds.currentID = -1;
+    GameSounds.loadNextSound = function () {
+        GameSounds.currentID++;
+        if(GameSounds.currentID>=GameSounds.sounds.length) return;
+
+        var i = GameSounds.currentID;
+
         GameSounds[GameSounds.sounds[i].id] = soundManager.createSound({
             id: GameSounds.sounds[i].id,
             url: GameSounds.sounds[i].url
@@ -984,8 +990,26 @@ GameSounds.init = function () {
         GameSounds[GameSounds.sounds[i].id].load({onload: function () {
             GameSounds.soundsLoaded+=1;
             GameSounds.perc_loaded = GameSounds.soundsLoaded/GameSounds.sounds.length*100;
+            GameSounds.loadNextSound();
         }})
     }
+
+    GameSounds.loadNextSound();
+
+    //begin loading of sounds
+    /*for(var i = 0;i<GameSounds.sounds.length;i++){//enumerate through list and load all sounds
+        GameSounds[GameSounds.sounds[i].id] = soundManager.createSound({
+            id: GameSounds.sounds[i].id,
+            url: GameSounds.sounds[i].url
+        });
+
+
+        GameSounds[GameSounds.sounds[i].id].load({onload: function () {
+            GameSounds.soundsLoaded+=1;
+            GameSounds.perc_loaded = GameSounds.soundsLoaded/GameSounds.sounds.length*100;
+        }})
+
+    }*/
 
     var that = this;
     //setTimeout(function(){that.playRandom()}, 20000);
