@@ -29,21 +29,9 @@ var displayed_perc = 0;
 loading_txt.x = stageWidth/2 - loading_txt.width/2;
 loading_txt.y = stageHeight/2 - loading_txt.height;
 
+GameSounds.init();
+
 stage.addChild(loading_txt);
-
-soundManager.useHTML5Audio = true;
-//soundManager.preferFlash = false;//false??
-
-soundManager.onerror = function () {
-    console.log("SoundManager error!");
-    GameSounds.forceMute = true;
-    GameSounds.perc_loaded = 100;
-}
-
-soundManager.onload = function () {
-    GameSounds.init();//begin loading sounds once soundManager has init.
-}
-
 
 //focus
 renderer.view.setAttribute('tabindex','0');
