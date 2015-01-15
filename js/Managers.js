@@ -3,6 +3,7 @@ ZombiesManager = {};
 MapManager = {};
 UIManager = {};
 GameSounds = {};
+ScreenManager = {};
 
 GameManager = {};
 GameManager.stage1 = {};
@@ -66,14 +67,14 @@ GameManager.stage1.step = function () {
     UIManager.step();
 
     //Handle "Camera" coordinates
-    var cameraX = -(george_char.leftLimit+300)+stageWidth/2;
+    var cameraX = -(george_char.leftLimit+300)+ScreenManager.stageWidth/2;
 
     if(MapManager.proceedToBoss) {
-        cameraX = -(george_char.x + 300) + stageWidth / 2;
+        cameraX = -(george_char.x + 300) + ScreenManager.stageWidth / 2;
     }else if(MapManager.focusRight){
-        cameraX = -(george_char.x + 150) + stageWidth / 2;
+        cameraX = -(george_char.x + 150) + ScreenManager.stageWidth / 2;
     } else if(MapManager.bossFight){
-        var cameraX = -(george_char.x)+stageWidth/2;
+        var cameraX = -(george_char.x)+ScreenManager.stageWidth/2;
 
         if(cameraX>MapManager.cameraLeftX) cameraX = MapManager.cameraLeftX;
         if(cameraX<MapManager.cameraRightX) cameraX = MapManager.cameraRightX;
@@ -121,11 +122,11 @@ GameManager.stage1.step = function () {
 
 
     renderer.render(stage);
-}
+};
 
 GameManager.stage1.handleChar = function () {
     george_char.step();
-}
+};
 
 GameManager.stage1.simulateGravity = function () {
     if(PlatformManager.freeze)return;
@@ -146,7 +147,7 @@ GameManager.stage1.simulateGravity = function () {
             }
         }
     }
-}
+};
 
 
 ZombiesManager.handleZombies = function () {
@@ -161,7 +162,7 @@ ZombiesManager.handleZombies = function () {
             zombie.updateMask();
         }
     }
-}
+};
 
 ZombiesManager.createZombieAt = function (_x, _y, type) {
     var zombie;
@@ -178,7 +179,7 @@ ZombiesManager.createZombieAt = function (_x, _y, type) {
 
     ZombiesManager.zombies.push(zombie);
     zombie.addToWorld();
-}
+};
 
 ZombiesManager.manageZombies = function(){
     ZombiesManager.currentTimerID = setTimeout(function(){ZombiesManager.manageZombies()}, ZombiesManager.checkTime);
@@ -190,7 +191,7 @@ ZombiesManager.manageZombies = function(){
     if(PlatformManager.platforms == 0)return;//safety
 
     for(i=0;i<ZombiesManager.zombies.length;i++){
-        if(ZombiesManager.zombies[i].x < george_char.x  -stageWidth/2 - 100){//kill trailing zombies, sorry bros
+        if(ZombiesManager.zombies[i].x < george_char.x  -ScreenManager.stageWidth/2 - 100){//kill trailing zombies, sorry bros
             ZombiesManager.zombies[i].die();
         }
     }
@@ -221,7 +222,7 @@ ZombiesManager.manageZombies = function(){
         ZombiesManager.numZombies++;
         ZombiesManager.createZombieAt(zombieX , platform.y);
     }
-}
+};
 
 ZombiesManager.removeZombie = function(zombie){
     var index = ZombiesManager.zombies.indexOf(zombie);
@@ -230,7 +231,7 @@ ZombiesManager.removeZombie = function(zombie){
     }else{
         console.log("Zombie not found!");
     }
-}
+};
 
 ZombiesManager.reset = function(){
     this.zombies = [];
@@ -244,7 +245,7 @@ PlatformManager.reset = function(){
     PlatformManager.platforms = [];
     PlatformManager.charList = [];
     PlatformManager.freeze = false;
-}
+};
 
 PlatformManager.addPlatform = function(x1, x2, y){
     PlatformManager.platforms.push(new platform(x1, x2, y));
@@ -252,21 +253,21 @@ PlatformManager.addPlatform = function(x1, x2, y){
 
 MapManager.addToMap = function(item){
     MapManager.layer1.addChild(item);
-}
+};
 
 MapManager.buildLayer0 = function (posX) {
     var grass = PIXI.Sprite.fromFrame("FrontGrass.png");
 
-    grass.y = stageHeight-grass.height+20;
+    grass.y = ScreenManager.stageHeight-grass.height+20;
     grass.x = posX;
 
     MapManager.layer0.addChild(grass);
-}
+};
 
 MapManager.buildLayer1 = function(posX){
     var ground = PIXI.Sprite.fromFrame("Ground.png");
 
-    ground.y = stageHeight-ground.height;
+    ground.y = ScreenManager.stageHeight-ground.height;
     ground.x = posX;
 
     //add platforms
@@ -294,31 +295,31 @@ MapManager.buildLayer1 = function(posX){
 
     MapManager.addToMap(ground);
 
-}
+};
 
 MapManager.buildLayer2 = function (posX) {
     var hill = PIXI.Sprite.fromFrame("Backhill.png");
 
     hill.x = posX;
-    hill.y = stageHeight-hill.height-40;
+    hill.y = ScreenManager.stageHeight-hill.height-40;
 
     MapManager.layer2.addChild(hill);
-}
+};
 
 MapManager.buildLayer3 = function (posX) {
     var hill = PIXI.Sprite.fromFrame("Backhill2.png");
 
     hill.x = posX+Math.random()*200;
-    hill.y = stageHeight-hill.height-10;
+    hill.y = ScreenManager.stageHeight-hill.height-10;
 
     MapManager.layer3.addChild(hill);
-}
+};
 
 MapManager.buildLayer4 = function (posX) {
     var hill = PIXI.Sprite.fromFrame("Backhill3.png");
 
     hill.x = posX+Math.random()*200;
-    hill.y = stageHeight-hill.height+30;
+    hill.y = ScreenManager.stageHeight-hill.height+30;
 
     MapManager.layer4.addChild(hill);
 };
@@ -331,7 +332,7 @@ MapManager.buildFinale = function(posX) {
     for (var i = 0; i < 3; i++) {
         var ground = PIXI.Sprite.fromFrame("Ground.png");
 
-        ground.y = stageHeight - ground.height;
+        ground.y = ScreenManager.stageHeight - ground.height;
         ground.x = posX;//increment
         posX+=800;
         MapManager.addToMap(ground);
@@ -340,7 +341,7 @@ MapManager.buildFinale = function(posX) {
     var bridge = new PIXI.Sprite.fromFrame("Bridge.png");
 
     bridge.x = posX-2;
-    bridge.y = stageHeight-88;
+    bridge.y = ScreenManager.stageHeight-88;
 
     //add platforms
     /*for(var i =0;i<2;i++){
@@ -370,7 +371,7 @@ MapManager.buildFinale = function(posX) {
     for (i = 0; i < 2; i++) {
         var ground = PIXI.Sprite.fromFrame("Ground.png");
 
-        ground.y = stageHeight - ground.height;
+        ground.y = ScreenManager.stageHeight - ground.height;
         ground.x = posX;//increment
         posX+=800;
         MapManager.addToMap(ground);
@@ -380,14 +381,14 @@ MapManager.buildFinale = function(posX) {
     var rail = new PIXI.Sprite.fromFrame("Rail.png");
 
     rail.x = posX-190;
-    rail.y = stageHeight-60;//-42
+    rail.y = ScreenManager.stageHeight-60;//-42
 
     MapManager.addToMap(rail);
 
     var leveler = new PIXI.Sprite.fromFrame("Leveler.png");
 
     leveler.x = posX +8;
-    leveler.y = stageHeight-121;
+    leveler.y = ScreenManager.stageHeight-121;
 
     MapManager.elevator = leveler;
 
@@ -455,7 +456,7 @@ MapManager.manageMap = function() {//called every so often to build the map ahea
 
     }
 
-    if (Math.abs(MapManager.layer0.x - stageWidth - 200) > MapManager.processed0X) {
+    if (Math.abs(MapManager.layer0.x - ScreenManager.stageWidth - 200) > MapManager.processed0X) {
         for (var i = 0; i < 3; i++) {
             MapManager.processed0X += 799;
             MapManager.buildLayer0(MapManager.processed0X);
@@ -463,14 +464,14 @@ MapManager.manageMap = function() {//called every so often to build the map ahea
     }
 
 
-    if (Math.abs(MapManager.layer2.x - stageWidth - 200) > MapManager.processed2X) {
+    if (Math.abs(MapManager.layer2.x - ScreenManager.stageWidth - 200) > MapManager.processed2X) {
         for (var i = 0; i < 3; i++) {
             MapManager.processed2X += 913;
             MapManager.buildLayer2(MapManager.processed2X);
         }
     }
 
-    if (Math.abs(MapManager.layer3.x - stageWidth - 200) > MapManager.processed3X) {
+    if (Math.abs(MapManager.layer3.x - ScreenManager.stageWidth - 200) > MapManager.processed3X) {
 
         for (var i = 0; i < 3; i++) {
             MapManager.processed3X += 464;
@@ -478,7 +479,7 @@ MapManager.manageMap = function() {//called every so often to build the map ahea
         }
     }
 
-    if (Math.abs(MapManager.layer4.x - stageWidth - 200) > MapManager.processed4X) {
+    if (Math.abs(MapManager.layer4.x - ScreenManager.stageWidth - 200) > MapManager.processed4X) {
 
         for (var i = 0; i < 3; i++) {
             MapManager.processed4X += 350;
@@ -531,13 +532,13 @@ MapManager.manageMap = function() {//called every so often to build the map ahea
             }
         }
     }
-}
+};
 
 MapManager.stopBridgeFinale = function () {
     ZombiesManager.maxZombies = 0;
     MapManager.proceedToBoss = true;
     GameSounds.ambientZombie = false;
-}
+};
 
 MapManager.fadeInPrepForElevator = function (){ //fades layer3 and 4
     MapManager.layer2.alpha -= .1;//3, 4
@@ -553,7 +554,7 @@ MapManager.fadeInPrepForElevator = function (){ //fades layer3 and 4
     } else {//keep on fading
         setTimeout(MapManager.fadeInPrepForElevator, 100);
     }
-}
+};
 
 MapManager.spawnBoss = function () {//called when elevator stops
     MapManager.hitler = new Boss();
@@ -565,7 +566,7 @@ MapManager.spawnBoss = function () {//called when elevator stops
 
     MapManager.hitler.addToWorld();
     UIManager.createBossBar();
-}
+};
 
 MapManager.elevatorRide = function () {//begin elevator ride
     while(MapManager.layer2.children.length>0){
@@ -579,7 +580,7 @@ MapManager.elevatorRide = function () {//begin elevator ride
     PlatformManager.addPlatform(7000, 99999,1402);//create boss platforms
 
     for(i =0;i<2;i++) {//2
-        var sprite = PIXI.Sprite.fromFrame("Trees.png")
+        var sprite = PIXI.Sprite.fromFrame("Trees.png");
 
         //sprite.x = george_char.x-400;
         //sprite.y = george_char.y-200;
@@ -594,7 +595,7 @@ MapManager.elevatorRide = function () {//begin elevator ride
 
     //MapManager.layer2.addChild(sprite);
     setTimeout(MapManager.elevatorStep, 30);
-}
+};
 
 MapManager.elevatorStep = function () {
 
@@ -622,7 +623,7 @@ MapManager.elevatorStep = function () {
     }
 
     setTimeout(MapManager.elevatorStep, 30);
-}
+};
 
 MapManager.step = function(){
     if(MapManager.finale){
@@ -673,7 +674,7 @@ MapManager.step = function(){
 
     }
 
-}
+};
 
 MapManager.shakeDone = function () {
     MapManager.shakeMagnitude = 0;
@@ -685,7 +686,7 @@ MapManager.shakeDone = function () {
     MapManager.layer3.y = 0;
     MapManager.layer4.y = 0;
     MapManager.layer5.y =  0;
-}
+};
 
 MapManager.shakeWorld = function (mag, dur) {
     if (MapManager.shakeMagnitude == 0) {
@@ -696,7 +697,7 @@ MapManager.shakeWorld = function (mag, dur) {
             MapManager.shakeDone();
         }, dur)
     }
-}
+};
 
 MapManager.reset = function(){//better name restart?
     MapManager.manageTime = 1000;//every 1 second
@@ -732,7 +733,7 @@ MapManager.reset = function(){//better name restart?
 
     //initialization
     var moon = PIXI.Sprite.fromFrame("Moon.png");
-    moon.x = stageWidth-100;
+    moon.x = ScreenManager.stageWidth-100;
     moon.y = 100;
 
     MapManager.sky = PIXI.Sprite.fromFrame("Sky.png");
@@ -754,7 +755,7 @@ MapManager.reset = function(){//better name restart?
     tut.y = 45;
 
     MapManager.layer1.addChild(tut);
-}
+};
 
 UIManager.updateGun = function () {
     if(this.expBar == null) return;
@@ -786,7 +787,7 @@ UIManager.updateGun = function () {
 
         }
     }
-}
+};
 
 UIManager.createUI = function () {
     this.UI = new PIXI.DisplayObjectContainer();
@@ -865,7 +866,7 @@ UIManager.createUI = function () {
     this.expBar.fill.x = 33;
     this.expBar.fill.y = 3;
 
-    this.expBar.x = stageWidth - 105;
+    this.expBar.x = ScreenManager.stageWidth - 105;
     this.expBar.y = 3;
 
     this.expBar.fill.mask = this.expBar.maskSprite;
@@ -881,12 +882,12 @@ UIManager.createUI = function () {
     this.UI.addChild(this.expBar);
 
     stage.addChild(this.UI);
-}
+};
 
 UIManager.step = function () {
     this.hpBar.maskSprite.scale.x = george_char.health/george_char.maxHealth;
     this.expBar.fill.scale.x = george_char.exp[george_char.gun]/george_char.levelup[george_char.gun];
-}
+};
 
 UIManager.createBossBar = function () {
     return;
@@ -898,38 +899,37 @@ UIManager.createBossBar = function () {
     this.bossBar.addChild(this.bossBar.fill);
 
     this.bossBar.fill.x = 25;
-    this.bossBar.fill.y = stageHeight-15;
+    this.bossBar.fill.y = ScreenManager.stageHeight-15;
 
     this.bossBar.back.x = 25;
-    this.bossBar.back.y = stageHeight-20;
+    this.bossBar.back.y = ScreenManager.stageHeight-20;
 
     stage.addChild(this.bossBar);
-}
+};
 
 GameSounds.playSound = function (snd) {
-    if(GameSounds.muted || GameSounds.forceMute)return;
+    if(GameSounds.muted || GameSounds.forceMute || GameSounds.perc_loaded != 100)return;
 
     if(this[snd] != null){
         this[snd].play();
     }
-}
+};
 
-/*TODO: remove defineSetter for IE*/
-GameSounds.__defineSetter__('ambientZombie', function (bool) {
+GameSounds.ambientZombie = function (bool) {
     if(bool){
         GameSounds.ambientZombieTimer = setTimeout(GameSounds.playAmbientZombie, GameSounds.ambientZombieDelay)
     }else if(GameSounds.ambientZombieTimer != null){
         clearTimeout(GameSounds.ambientZombieTimer);
     }
-});
+};
 
-GameSounds.__defineSetter__('ambientGeorge', function (bool) {
+GameSounds.ambientGeorge = function (bool) {
     if(bool){
         GameSounds.ambientGeorgeTimer = setTimeout(GameSounds.playAmbientGeorge, GameSounds.ambientGeorgeDelay)
     }else if(GameSounds.ambientGeorgeTimer != null){
         clearTimeout(GameSounds.ambientGeorgeTimer);
     }
-});
+};
 
 GameSounds.playAmbientZombie = function () {
     var id = Math.round(Math.random()*2) + 1;
@@ -937,7 +937,7 @@ GameSounds.playAmbientZombie = function () {
     GameSounds.playSound('zombie'+id);
 
     GameSounds.ambientZombieTimer = setTimeout(GameSounds.playAmbientZombie, GameSounds.ambientZombieDelay)
-}
+};
 
 GameSounds.playAmbientGeorge = function () {
     var id = Math.round(Math.random()*1) + 1;
@@ -945,15 +945,15 @@ GameSounds.playAmbientGeorge = function () {
     GameSounds.playSound('george'+id);
 
     GameSounds.ambientZombieTimer = setTimeout(GameSounds.playAmbientGeorge, GameSounds.ambientGeorgeDelay)
-}
+};
 
 GameSounds.init = function () {
-    GameSounds.ambientZombie = false;
-    GameSounds.ambientGeorge = true;
+    GameSounds.ambientZombie(true);
+    GameSounds.ambientGeorge(true);
     GameSounds.ambientZombieDelay = 8000;
     GameSounds.ambientGeorgeDelay = 15000;
     GameSounds.soundsLoaded = 0;
-    GameSounds.forceMute = false; //if soundManager fails
+    GameSounds.forceMute = false;
     GameSounds.perc_loaded = 0;
     GameSounds.muted = false;
     GameSounds.muteThemeSong = false;
@@ -995,7 +995,7 @@ GameSounds.init = function () {
                 GameSounds.loadNextSound();
             },
             loop: (GameSounds.sounds[i].id == "theme")
-        })
+        });
 
         /*var i = GameSounds.currentID;
 
@@ -1009,9 +1009,11 @@ GameSounds.init = function () {
             GameSounds.perc_loaded = GameSounds.soundsLoaded/GameSounds.sounds.length*100;
             GameSounds.loadNextSound();
         }})*/
-    }
+    };
 
     GameSounds.loadNextSound();
+
+    GameSounds.mute();
 
     //begin loading of sounds
     /*for(var i = 0;i<GameSounds.sounds.length;i++){//enumerate through list and load all sounds
@@ -1029,7 +1031,7 @@ GameSounds.init = function () {
     }*/
 
     var that = this;
-}
+};
 
 GameSounds.mute = function () {
     GameSounds.muted = !GameSounds.muted;
@@ -1039,7 +1041,7 @@ GameSounds.mute = function () {
         //begin theme song
         GameSounds.beginThemeSong();
     }
-}
+};
 
 GameSounds.beginThemeSong = function () {
     if(GameSounds.muted || GameSounds.forceMute || GameSounds.muteThemeSong) return;
@@ -1047,5 +1049,51 @@ GameSounds.beginThemeSong = function () {
     //soundManager.play('theme', {onfinish: GameSounds.beginThemeSong}); //replay theme song when ended
     //GameSounds.theme.loop = true;
     GameSounds.theme.play();
-}
+};
 
+ScreenManager.stageWidth = 704;
+ScreenManager.stageHeight = 440;
+
+ScreenManager.init = function () {
+    ScreenManager.loopPeriod = 200;
+    ScreenManager.lastFSRes = 1;
+
+    ScreenManager.loop = function () {
+
+        setTimeout(ScreenManager.loop, ScreenManager.loopPeriod);
+    }
+
+    ScreenManager.loop = function(){
+        if(screenfull.isFullscreen){
+            //TODO: save cookies for maximum screen resolution
+            scale = window.innerHeight / ScreenManager.stageHeight;
+
+            if(scale != ScreenManager.lastFSRes) {
+                ScreenManager.lastFSRes = scale;
+
+                //calculate new width to fill in vertical letterbox
+                ScreenManager.stageWidth = window.innerWidth / scale;
+
+                renderer.resolution = scale;
+                renderer.resize(ScreenManager.stageWidth, ScreenManager.stageHeight);//refresh renderer
+            }
+        }
+
+        setTimeout(ScreenManager.loop, 200);
+        //TODO: Make sure this function doesn't create multiple loops
+    }
+
+    //-----------------------------
+    ScreenManager.loop();//begin loop
+
+    renderer.view.addEventListener("touchend", function () {
+        if (screenfull.enabled) {
+            if (!screenfull.isFullscreen) {
+                screenfull.request();
+            }/*else{
+                screenfull.exit();
+                renderer.resolution = 1;
+            }*/
+        }
+    })
+}

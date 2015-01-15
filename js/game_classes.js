@@ -12,7 +12,7 @@ function base_char(pixiLoc, hp){
     this.jumping = false;
     this.walking = false;
     this.inAir = false;
-    this.step = function () {}
+    this.step = function () {};
     this.move_speed = 5;
 
     this.addToWorld = function(){
@@ -21,12 +21,12 @@ function base_char(pixiLoc, hp){
         if(this.g != 0){
             PlatformManager.charList.push(this);
         }
-    }
+    };
 
     this.setSprite = function(loc){
         this.sprite = new PIXI.Spine(loc);
         this.sprite.state.setAnimationByName("Idle", true);
-    }
+    };
 
     this.__defineGetter__("x", function(){
         return this.sprite.x;
@@ -213,7 +213,7 @@ function George(hp){
         if(!this.attacking && !this.shooting && Key.isDown(90)){
             this.walking = false;
             this.attacking = true;
-            GameSounds.playSound('swing')
+            GameSounds.playSound('swing');
             id = Math.round(Math.random()*1+1);
             this.sprite.state.setAnimationByName("Melee"+id, false);
             var that = this;
@@ -283,12 +283,12 @@ function George(hp){
             }
         }
 
-    }
+    };
 
     this.levelHealth = function () {
         this.maxHealth+=10;
         this.health = this.maxHealth;
-    }
+    };
 
     this.expGain = function (amount) {
         if(amount == null){//melee
@@ -341,7 +341,7 @@ function George(hp){
             this.setGun(this.gun);
             UIManager.updateGun();
         }
-    }
+    };
 
     this.shoot = function () {
         //sound & shake-----------------------------------------
@@ -381,7 +381,7 @@ function George(hp){
             shooting.alpha-=.1;
             shooting.x = george_char.x-shooting.offsetX;
             shooting.timer = setTimeout(shooting.fadeAlpha, 10);
-        }
+        };
 
         //shooting.timer = setTimeout(shooting.fadeAlpha, 50);
 
@@ -444,7 +444,7 @@ function George(hp){
             }
         }
 
-    }
+    };
     
     this.setGun = function (gun) {
         if(gun == 0){
@@ -464,7 +464,7 @@ function George(hp){
         UIManager.updateGun();
 
         this.sprite.skeleton.setSlotsToSetupPose();
-    }
+    };
     
     this.revive = function () {
         GameSounds.playSound("respawn");
@@ -491,7 +491,7 @@ function George(hp){
         setTimeout(function () {
             george_char.dead = false;
         }, beam.state.current.duration*1000);
-    }
+    };
     
     this.hit = function (dmg) {
         if(this.dead || GameManager.debugMode)return;
@@ -522,14 +522,14 @@ function George(hp){
             setTimeout(function(){that.jumpFreeze = false;}, 300);//can jump in half a second
             setTimeout(function(){that.jumpFreeze = false;}, 300);//can jump in half a second
         }
-    }
+    };
     this.attackDone = function() {
         if(this.dead)return;
         this.attacking = false;
         if (!this.walking) {
             this.sprite.state.setAnimationByName("Idle", true);
         }
-    }
+    };
 
     this.setGun(this.gun);
 }
@@ -583,11 +583,11 @@ function Zombie(type){
             world.removeChild(this.sprite.mask);
             this.sprite.mask = null;
         }
-    }
+    };
     
     this.updateMask = function () {
         this.sprite.mask.y = this.y;
-    }
+    };
     
     this.shot = function (dmg) {
         if(this.dead)return;
@@ -633,21 +633,21 @@ function Zombie(type){
                 that.sprite.skeleton.setSlotsToSetupPose();
             },this.sprite.state.current.duration*1000);
         }
-    }
+    };
 
     this.setSprite = function(loc, skin){ //override base_char
         this.sprite = new PIXI.Spine(loc);
         this.sprite.skeleton.setSkinByName(skin);
         this.sprite.state.setAnimationByName("Spawn", false);//change this to spawn
         this.sprite.state.addAnimationByName("Walking", true, 0);
-        this.sprite.skeleton.setSlotsToSetupPose()
+        this.sprite.skeleton.setSlotsToSetupPose();
 
         var that = this;
         setTimeout(function(){//done spawning
             that.spawned = true;
             that.setMask(false);
         }, this.sprite.state.current.duration*1000);
-    }
+    };
     this.setSprite("data/nazi.json", "Z"+type);
 
     this.stopAttack = function(){
@@ -655,7 +655,7 @@ function Zombie(type){
         this.stoppingAttack = false;
         this.attacking = false;
         this.sprite.state.setAnimationByName("Walking", true);
-    }
+    };
 
     this.die = function(id){
         if(this.dead) return; //can't die twice!
@@ -677,7 +677,7 @@ function Zombie(type){
         setTimeout(function(){
             that.fadeBody(that);
         }, 6000);//remove after 6 seconds?
-    }
+    };
 
     this.fadeBody = function(ref){
         var index = PlatformManager.charList.indexOf(ref);
@@ -694,7 +694,7 @@ function Zombie(type){
                 world.removeChild(ref.sprite);
             }
         }
-    }
+    };
 
     this.hitTestID = -1;
     this.hitTestChar = function () {
@@ -708,7 +708,7 @@ function Zombie(type){
         this.hitTestID = setTimeout(function () {
             that.hitTestChar();
         }, this.attackSpeed);
-    }
+    };
     
     this.knockback = function () {
         if(this.dead) return;
@@ -755,7 +755,7 @@ function Zombie(type){
         setTimeout(function () {
             that.recoil = false;
         },750);
-    }
+    };
 
     this.step = function(){ //zombie AI
         if(!george_char.dead && !this.recoil && !this.attacking && this.x<george_char.x && this.x+this.offsetX<george_char.x){//need to move right
@@ -855,20 +855,20 @@ function Boss(){
             this.attacking = true;
             this.punch();
         }
-    }
+    };
 
     
     this.idle = function () {
         if(this.attacking)return;
         this.sprite.state.setAnimationByName("Idle");
-    }
+    };
 
     this.hitTestPunch = function () {
         if(Math.abs(this.x-george_char.x)<200){
             george_char.hit(this.punchDamage);
             george_char.speedX = -this.sprite.scale.x*10;//knockback
         }
-    }
+    };
     
     this.punch = function () {
         this.sprite.state.setAnimationByName("Hit1");
@@ -883,12 +883,12 @@ function Boss(){
             that.attacking = false;
             that.idle();
         }, this.sprite.state.current.duration*1000);
-    }
+    };
     
     this.shoot = function () {
         this.sprite.state.setAnimationByName("Hit2");
 
-        var ball = new PIXI.Sprite.fromFrame("HitBall.png")
+        var ball = new PIXI.Sprite.fromFrame("HitBall.png");
         ball.x = this.x;
         ball.y = this.y;
 
@@ -905,7 +905,7 @@ function Boss(){
 
             var that = this;
             ball.timer = setTimeout(function(){that.step()}, 30);
-        }
+        };
 
         ball.timer = setTimeout(function(){ball.step()}, 30);
 
@@ -917,7 +917,7 @@ function Boss(){
             that.attacking = false;
             that.idle();
         }, this.sprite.state.current.duration*1000);
-    }
+    };
 
     this.die = function () {
         if(this.dead)return;
@@ -929,7 +929,7 @@ function Boss(){
         this.dead = true;
         this.sprite.state.clearAnimation();
         this.sprite.state.setAnimationByName("Death", false);
-    }
+    };
 
     this.damage = function (amount) {
         if(this.dead)return;

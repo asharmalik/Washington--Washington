@@ -1,12 +1,33 @@
-var stageWidth = 704;
-var stageHeight = 440;
 var stage = new PIXI.Stage(0xCCCCCC);
 
+var rendererOptions = {
+    antialiasing:false,
+    transparent:false,
+    resolution: 1
+}
+
+
 // create a renderer instance
-var renderer = new PIXI.autoDetectRenderer(stageWidth, stageHeight);
+var renderer = new PIXI.autoDetectRenderer(ScreenManager.stageWidth, ScreenManager.stageHeight, rendererOptions);
 renderer.view.style.display = "block";
 
 document.body.appendChild(renderer.view);
+
+//following is mobile only
+if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+    GameManager.mobile = true;
+    ScreenManager.init();//only initialize if mobile
+}else{
+    GameManager.mobile = false;
+}
+
+
+/*renderer.view.addEventListener("click", function () {
+    console.log("click");
+    if (screenfull.enabled) {
+        screenfull.request();
+    }
+});*/
 
 var assets = ["data/nazi.json", "data/nazipacked.json", "data/George.json", "data/georgepacked.json", "data/map/map1.json", "data/effects.json", "data/map/ui.json", "data/hitler.json", "data/RoboHitler.json"];
 
@@ -26,8 +47,8 @@ var perc_assets_loaded = 0;
 var perc_loaded = 0;
 var displayed_perc = 0;
 
-loading_txt.x = stageWidth/2 - loading_txt.width/2;
-loading_txt.y = stageHeight/2 - loading_txt.height;
+loading_txt.x = ScreenManager.stageWidth/2 - loading_txt.width/2;
+loading_txt.y = ScreenManager.stageHeight/2 - loading_txt.height;
 
 GameSounds.init();
 
@@ -67,7 +88,7 @@ function update_loader(){
     while(displayed_perc<perc_loaded) displayed_perc+=1;
 
     loading_txt.setText("["+displayed_perc+"%]");
-    loading_txt.x = stageWidth/2 - loading_txt.width/2;
+    loading_txt.x = ScreenManager.stageWidth/2 - loading_txt.width/2;
     renderer.render(stage);
 
     if(displayed_perc > 95 && perc_loaded == 100){
@@ -77,6 +98,8 @@ function update_loader(){
 
     requestAnimationFrame(update_loader);
 }
+
+
 
 // george_char.sprite.skeleton.setSkin()
 //george_char.sprite.skeleton.bones[2].name
