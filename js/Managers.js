@@ -699,7 +699,7 @@ MapManager.shakeWorld = function (mag, dur) {
     }
 };
 
-MapManager.reset = function(){//better name restart?
+MapManager.reset = function(){
     MapManager.manageTime = 1000;//every 1 second
     MapManager.processed0X = -799;
     MapManager.proccessedX = -800;
@@ -739,10 +739,14 @@ MapManager.reset = function(){//better name restart?
     MapManager.sky = PIXI.Sprite.fromFrame("Sky.png");
     MapManager.sky.x = -1;
 
+    MapManager.sky2 = PIXI.Sprite.fromFrame("Sky.png");
+    MapManager.sky2.x = MapManager.sky.x+MapManager.sky.width-2;
+
     MapManager.layer5.addChild(moon);
 
     MapManager.manageMap();
     stage.addChild(MapManager.sky);
+    stage.addChild(MapManager.sky2);
     stage.addChild(MapManager.layer5);
     stage.addChild(MapManager.layer4);
     stage.addChild(MapManager.layer3);
@@ -1051,36 +1055,46 @@ GameSounds.beginThemeSong = function () {
     GameSounds.theme.play();
 };
 
-ScreenManager.stageWidth = 704;
-ScreenManager.stageHeight = 440;
+ScreenManager.originalWidth = 704;
+ScreenManager.originalHeight = 440;
+
+ScreenManager.stageWidth = ScreenManager.originalWidth;
+ScreenManager.stageHeight = ScreenManager.originalHeight;
 
 ScreenManager.init = function () {
     ScreenManager.loopPeriod = 200;
     ScreenManager.lastFSRes = 1;
 
-    ScreenManager.loop = function () {
-
-        setTimeout(ScreenManager.loop, ScreenManager.loopPeriod);
-    }
-
     ScreenManager.loop = function(){
         if(screenfull.isFullscreen){
-            //TODO: save cookies for maximum screen resolution
-            scale = window.innerHeight / ScreenManager.stageHeight;
 
-            if(scale != ScreenManager.lastFSRes) {
-                ScreenManager.lastFSRes = scale;
+            if(window.innerHeight<window.innerWidth) {//landscape mode
+                scale = window.innerHeight / ScreenManager.stageHeight;
 
-                //calculate new width to fill in vertical letterbox
-                ScreenManager.stageWidth = window.innerWidth / scale;
+                if (scale != ScreenManager.lastFSRes) {
+                    ScreenManager.lastFSRes = scale;
 
-                renderer.resolution = scale;
-                renderer.resize(ScreenManager.stageWidth, ScreenManager.stageHeight);//refresh renderer
+                    //calculate new width to fill in vertical letterbox
+                    ScreenManager.stageWidth = window.innerWidth / scale;
+
+                    renderer.resolution = scale;
+                    renderer.resize(ScreenManager.stageWidth, ScreenManager.stageHeight);//refresh renderer
+                }
+            }else{//portrait mode
+                scale = window.innerWidth / ScreenManager.stageWidth;
+
+                if (scale != ScreenManager.lastFSRes) {
+                    ScreenManager.lastFSRes = scale;
+
+                    ScreenManager.stageWidth = ScreenManager.originalWidth;//reset stage size
+
+                    renderer.resolution = scale;
+                    renderer.resize(ScreenManager.stageWidth, ScreenManager.stageHeight);//refresh renderer
+                }
             }
         }
 
-        setTimeout(ScreenManager.loop, 200);
-        //TODO: Make sure this function doesn't create multiple loops
+        setTimeout(ScreenManager.loop, ScreenManager.loopPeriod);
     }
 
     //-----------------------------
