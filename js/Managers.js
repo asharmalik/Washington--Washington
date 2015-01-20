@@ -927,10 +927,12 @@ GameSounds.ambientZombie = function (bool) {
         GameSounds.ambientZombieTimer = setTimeout(GameSounds.playAmbientZombie, GameSounds.ambientZombieDelay)
     }else if(GameSounds.ambientZombieTimer != null){
         clearTimeout(GameSounds.ambientZombieTimer);
+        GameSounds.ambientZombieTimer = null;
     }
 };
 
 GameSounds.ambientGeorge = function (bool) {
+
     if(bool){
         GameSounds.ambientGeorgeTimer = setTimeout(GameSounds.playAmbientGeorge, GameSounds.ambientGeorgeDelay)
     }else if(GameSounds.ambientGeorgeTimer != null){
@@ -939,6 +941,7 @@ GameSounds.ambientGeorge = function (bool) {
 };
 
 GameSounds.playAmbientZombie = function () {
+    if(GameSounds.ambientZombieTimer == null)return;
     var id = Math.round(Math.random()*2) + 1;
 
     GameSounds.playSound('zombie'+id);
@@ -964,7 +967,6 @@ GameSounds.init = function () {
     GameSounds.perc_loaded = 0;
     GameSounds.muted = false;
     GameSounds.muteThemeSong = false;
-    GameSounds.perc_loaded = 0;
     GameSounds.sounds = [
         {id:'shotgun', urls: ['sound/SFX_Shotgun.ogg']},
         {id:'pistol', urls: ['sound/SFX_Gun.ogg']},
