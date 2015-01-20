@@ -4,6 +4,7 @@ MapManager = {};
 UIManager = {};
 GameSounds = {};
 ScreenManager = {};
+ControlsManager = {};
 
 GameManager = {};
 GameManager.stage1 = {};
@@ -35,7 +36,6 @@ GameManager.beginGame1 = function(){
 
     ZombiesManager.reset();
     MapManager.reset();
-    GameSounds.ambientZombie = true;
 
     PlatformManager.addPlatform(-999, 99999, 402);
     UIManager.createUI();
@@ -435,13 +435,11 @@ MapManager.beginLayer0Fade = function () {
 };
 
 MapManager.startFinale = function(){//on bridge
-    ZombiesManager.maxZombies = 100;
+    ZombiesManager.maxZombies = (GameManager.mobile)?25:60;
     ZombiesManager.checkTime = 250;//every half second
 };
 
 MapManager.manageMap = function() {//called every so often to build the map ahead
-
-
     if (MapManager.proccessedX < george_char.x && !MapManager.finale) {//extend ground
         for (var i = 0; i < 3; i++) {//build 3 chunks
             MapManager.proccessedX += 800;
@@ -537,7 +535,7 @@ MapManager.manageMap = function() {//called every so often to build the map ahea
 MapManager.stopBridgeFinale = function () {
     ZombiesManager.maxZombies = 0;
     MapManager.proceedToBoss = true;
-    GameSounds.ambientZombie = false;
+    GameSounds.ambientZombie(false);
 };
 
 MapManager.fadeInPrepForElevator = function (){ //fades layer3 and 4
@@ -793,6 +791,11 @@ UIManager.updateGun = function () {
     }
 };
 
+UIManager.refreshUI = function () {
+    if(this.expBar == null)return;
+    this.expBar.x = ScreenManager.stageWidth - 105;
+}
+
 UIManager.createUI = function () {
     this.UI = new PIXI.DisplayObjectContainer();
 
@@ -1017,22 +1020,7 @@ GameSounds.init = function () {
 
     GameSounds.loadNextSound();
 
-    GameSounds.mute();
-
-    //begin loading of sounds
-    /*for(var i = 0;i<GameSounds.sounds.length;i++){//enumerate through list and load all sounds
-        GameSounds[GameSounds.sounds[i].id] = soundManager.createSound({
-            id: GameSounds.sounds[i].id,
-            url: GameSounds.sounds[i].url
-        });
-
-
-        GameSounds[GameSounds.sounds[i].id].load({onload: function () {
-            GameSounds.soundsLoaded+=1;
-            GameSounds.perc_loaded = GameSounds.soundsLoaded/GameSounds.sounds.length*100;
-        }})
-
-    }*/
+    //GameSounds.mute();
 
     var that = this;
 };
@@ -1079,6 +1067,7 @@ ScreenManager.init = function () {
 
                     renderer.resolution = scale;
                     renderer.resize(ScreenManager.stageWidth, ScreenManager.stageHeight);//refresh renderer
+                    UIManager.refreshUI();
                 }
             }else{//portrait mode
                 scale = window.innerWidth / ScreenManager.stageWidth;
@@ -1090,6 +1079,7 @@ ScreenManager.init = function () {
 
                     renderer.resolution = scale;
                     renderer.resize(ScreenManager.stageWidth, ScreenManager.stageHeight);//refresh renderer
+                    UIManager.refreshUI();
                 }
             }
         }
@@ -1104,10 +1094,92 @@ ScreenManager.init = function () {
         if (screenfull.enabled) {
             if (!screenfull.isFullscreen) {
                 screenfull.request();
-            }/*else{
+            }
+            /*
                 screenfull.exit();
                 renderer.resolution = 1;
             }*/
         }
     })
+}
+
+ControlsManager.init = function () {
+    ControlsManager.touchLeft = false;
+    ControlsManager.touchRight = false;
+    ControlsManager.touchShoot = false;
+    ControlsManager.touchMelee = false;
+    ControlsManager.touchJump = false;
+    ControlsManager.currentFingers = [];
+
+
+    ControlsManager.left = function () {
+        return (Key.isDown(Key.LEFT) || ControlsManager.touchLeft);
+    }
+
+    ControlsManager.right = function () {
+        return (Key.isDown(Key.RIGHT) || ControlsManager.touchRight);
+    }
+    
+    ControlsManager.shoot = function () {
+        return (Key.isDown(Key.SHOOT) || ControlsManager.touchShoot);
+    }
+    
+    ControlsManager.melee = function () {
+        return (Key.isDown(Key.MELEE) || ControlsManager.touchMelee);
+    }
+
+    ControlsManager.jump = function () {
+        return (Key.isDown(Key.JUMP) || ControlsManager.touchJump);
+    }
+    
+    ControlsManager.touchBegin = function (e) {
+        var touch = e.changedTouches[0];
+        var scaledX = touch.pageX/window.innerWidth;
+        var scaledY = touch.pageY/window.innerHeight;
+
+        if (scaledX < .33 || scaledX > .66){ //left and right part of screen
+            if(scaledX> .66 && scaledY < .10){//change weapon
+                george_char.gun++;
+                if(george_char.gun == 3){
+                    george_char.gun = 0;//wrapping
+                }
+                george_char.setGun(george_char.gun);
+            }else if(scaledY < .66){//walk
+                if(scaledX < .33) {//walk left
+                    ControlsManager.touchLeft = true;
+                    ControlsManager.currentFingers.push({id: touch.identifier, key: 'touchLeft'});
+                }else{//walk right
+                    ControlsManager.touchRight = true;
+                    ControlsManager.currentFingers.push({id: touch.identifier, key: 'touchRight'});
+                }
+            }else if(scaledY<.85){//shoot (middle)
+                ControlsManager.touchShoot = true;
+                ControlsManager.currentFingers.push({id: touch.identifier, key: 'touchShoot'});
+            }else{//melee (bottom)
+                ControlsManager.touchMelee = true;
+                ControlsManager.currentFingers.push({id: touch.identifier, key: 'touchMelee'});
+            }
+
+        }else if(scaledX < .66){//middle part of screen
+            ControlsManager.touchJump = true;
+            ControlsManager.currentFingers.push({id: touch.identifier, key: 'touchJump'});
+        }
+    }
+
+    ControlsManager.touchEnd = function (e) {
+        var touch = e.changedTouches[0];
+
+        for(var i = 0;i<ControlsManager.currentFingers.length;i++){
+            if(ControlsManager.currentFingers[i].id == touch.identifier){
+                ControlsManager[ControlsManager.currentFingers[i].key] = false;
+                ControlsManager.currentFingers.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    if(GameManager.mobile) {
+        renderer.view.addEventListener('touchstart', ControlsManager.touchBegin);
+        renderer.view.addEventListener('touchend', ControlsManager.touchEnd);
+    }
 }

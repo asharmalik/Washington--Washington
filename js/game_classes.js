@@ -63,7 +63,7 @@ function George(hp){
     this.jumpFreeze = false;
     this.kbrange = 40;
     this.kbDmg = 3;
-    this.gun = 0;
+    this.gun = 2;
     this.shootDelay = 100;
     this.gundmg = 1;
     this.gunhit = 1;
@@ -88,6 +88,15 @@ function George(hp){
     this.shootDelays = [350, 150, 500];//600
     //power ups
 
+    this.attemptJump = function () {
+        if(!this.attacking && !this.inAir && !this.jumpFreeze){
+            this.yAccel = this.jumpHeight;
+            this.inAir = true;
+            this.sprite.state.setAnimationByName("Prejump", false);
+            this.sprite.state.addAnimationByName("Jump", true, 0);
+        }
+    }
+    
     this.step = function(){
         if(!MapManager.finale) {
             world.setChildIndex(this.sprite, world.children.length - 1);
@@ -99,13 +108,11 @@ function George(hp){
 
         if(this.dead)return;
         //jumping
-        if(!this.attacking && Key.isDown(32) && !this.inAir && !this.jumpFreeze){//spacebar
-            this.yAccel = this.jumpHeight;
-            this.inAir = true;
-            this.sprite.state.setAnimationByName("Prejump", false);
-            this.sprite.state.addAnimationByName("Jump", true, 0);
+        if(ControlsManager.jump()){
+            this.attemptJump();
         }
-        if(!this.attacking && Key.isDown(32) && !this.jumpFreeze && this.doubleJump && !this.doubleJumped && this.inAir && this.yAccel>=0){//in air and coming down, double jump
+        //double jumping
+        if(!this.attacking && ControlsManager.jump() && !this.jumpFreeze && this.doubleJump && !this.doubleJumped && this.inAir && this.yAccel>=0){//in air and coming down, double jump
             this.doubleJumped = true;
             this.yAccel = -this.doubleJumpHeight;
         }
@@ -130,8 +137,8 @@ function George(hp){
         }
         //Walking
         if(!this.attacking) {
-            if (Key.isDown(Key.LEFT) && !Key.isDown(Key.RIGHT)) {
-                if (!this.walking) {
+            if (ControlsManager.left() && !ControlsManager.right()) {
+                if (!this.walking) {//began walking
                     this.walking = true;
 
                     if (!this.inAir) {
@@ -139,11 +146,11 @@ function George(hp){
                     }
                 }
                 this.sprite.scale.x = -1;
-                this.speedX-=this.acc; //
+                this.speedX-=this.acc;
                 if(this.speedX<= -this.maxSpeed) this.speedX = -this.maxSpeed;
             }
 
-            if (Key.isDown(Key.RIGHT) && !Key.isDown(Key.LEFT)) {
+            if (ControlsManager.right() && !ControlsManager.left()) {
                 if (!this.walking) {
                     this.walking = true;
                     if (!this.inAir) {
@@ -157,7 +164,7 @@ function George(hp){
 
         }
 
-        if (Key.isDown(Key.LEFT) == Key.isDown(Key.RIGHT) && this.walking) {
+        if (ControlsManager.left() == ControlsManager.right() && this.walking) {
             this.walking = false;
             if (!this.inAir) {
                 this.sprite.state.clearAnimation();
@@ -210,7 +217,7 @@ function George(hp){
         }
 
         //Melee
-        if(!this.attacking && !this.shooting && Key.isDown(90)){
+        if(!this.attacking && !this.shooting && ControlsManager.melee()){
             this.walking = false;
             this.attacking = true;
             GameSounds.playSound('swing');
@@ -253,7 +260,7 @@ function George(hp){
             this.setGun(2);//shotty
         }
         //Shoot
-        if(Key.isDown(88) && !this.attacking) {
+        if(ControlsManager.shoot() && !this.attacking) {
             if (!this.shooting && !this.walking && !this.inAir) {//Idle
                 this.walking = false;
                 this.shooting = true;
@@ -338,7 +345,7 @@ function George(hp){
                 this.shootDelays[this.gun] = 1;
             }
 
-            this.setGun(this.gun);
+            this.setGun(this.gun);//refresh stats
             UIManager.updateGun();
         }
     };
@@ -676,7 +683,7 @@ function Zombie(type){
 
         setTimeout(function(){
             that.fadeBody(that);
-        }, 6000);//remove after 6 seconds?
+        }, (GameManager.mobile)?3000: 15000);
     };
 
     this.fadeBody = function(ref){

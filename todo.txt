@@ -14,14 +14,15 @@ different volume levels for metal ricochet depending on gun
 =============
 Etc:
 Add mute button
-Add mobile capabilities..? Maybe auto play mode or figure our controls
 Spine wrapper?
 bg disappeared for boss fight
 make game load faster by not just waiting 100 ms before loading the next sound. see if that works.
 create alternative mp3 to ogg
+Demo mode?
 
 
 bugs:
+camera goes too far on extended display during boss fight
 Boss punch doesnt do y hit deteciton
 fix voice overlap during death?
 get rid of definegetter and setter functions (IE does not support)

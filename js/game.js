@@ -6,7 +6,6 @@ var rendererOptions = {
     resolution: 1
 }
 
-
 // create a renderer instance
 var renderer = new PIXI.autoDetectRenderer(ScreenManager.stageWidth, ScreenManager.stageHeight, rendererOptions);
 renderer.view.style.display = "block";
@@ -21,19 +20,10 @@ if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(naviga
     GameManager.mobile = false;
 }
 
-
-/*renderer.view.addEventListener("click", function () {
-    console.log("click");
-    if (screenfull.enabled) {
-        screenfull.request();
-    }
-});*/
-
 var assets = ["data/nazi.json", "data/nazipacked.json", "data/George.json", "data/georgepacked.json", "data/map/map1.json", "data/effects.json", "data/map/ui.json", "data/hitler.json", "data/RoboHitler.json"];
 
 loader = new PIXI.AssetLoader(assets, false);
 
-//loader.onComplete = onAssetsLoaded;
 loader.onProgress = onProgress;
 loader.load();
 
@@ -51,6 +41,7 @@ loading_txt.x = ScreenManager.stageWidth/2 - loading_txt.width/2;
 loading_txt.y = ScreenManager.stageHeight/2 - loading_txt.height;
 
 GameSounds.init();
+ControlsManager.init();
 
 stage.addChild(loading_txt);
 
@@ -84,7 +75,7 @@ function onProgress(){
 }
 
 function update_loader(){
-    perc_loaded = (perc_assets_loaded+GameSounds.perc_loaded)/2;
+    perc_loaded = (perc_assets_loaded+GameSounds.perc_loaded)/2;//GameSounds.perc_loaded
     while(displayed_perc<perc_loaded) displayed_perc+=1;
 
     loading_txt.setText("["+displayed_perc+"%]");
