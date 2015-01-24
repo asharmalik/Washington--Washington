@@ -964,7 +964,7 @@ GameSounds.init = function () {
     GameSounds.muted = false;
     GameSounds.muteThemeSong = false;
     GameSounds.sound = new Howl({
-        urls: ['data/sounds.ogg'],
+        urls: ['data/sound/sounds.ogg'],
         sprite: {
             george1: [0, 1613],
             george2: [1714, 1610],
@@ -980,15 +980,23 @@ GameSounds.init = function () {
             respawn: [15484, 4129],
             shotgun: [19714, 2185],
             swing: [22000, 356],
-            theme: [22458, 48114],
-            zombie1: [70673, 3235],
-            zombie2: [74010, 1601],
-            zombie3: [75712, 2893]
+            zombie1: [22458, 3235],
+            zombie2: [25794, 1601],
+            zombie3: [27497, 2893]
         },
 
         onload: function () {
             console.log("loaded!");
+            console.log(GameSounds.sound);
             GameSounds.perc_loaded = 100;
+        }
+    });
+
+    GameSounds.theme = new Howl({
+        urls: ['data/sound/theme.ogg'],
+        loop: true,
+        onload: function () {
+            GameSounds.beginThemeSong();
         }
     });
 
@@ -1010,8 +1018,6 @@ GameSounds.mute = function () {
 GameSounds.beginThemeSong = function () {
     if(GameSounds.muted || GameSounds.forceMute || GameSounds.muteThemeSong) return;
 
-    //soundManager.play('theme', {onfinish: GameSounds.beginThemeSong}); //replay theme song when ended
-    //GameSounds.theme.loop = true;
     GameSounds.theme.play();
 };
 

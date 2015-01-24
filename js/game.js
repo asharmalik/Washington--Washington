@@ -67,7 +67,6 @@ function onAssetsLoaded()
 {
     stage.removeChild(loading_txt);
     GameManager.beginGame1();
-    GameSounds.beginThemeSong();
 }
 
 function onProgress(){
