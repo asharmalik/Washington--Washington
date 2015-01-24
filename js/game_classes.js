@@ -84,7 +84,7 @@ function George(hp){
 
     this.gunranges = [500, 500, 300];
     this.gunhits = [1, 1, 2];
-    this.gundmgs = [5, 3, 8];
+    this.gundmgs = [7, 5, 8];
     this.shootDelays = [350, 150, 500];//600
     //power ups
 

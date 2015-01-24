@@ -917,9 +917,7 @@ UIManager.createBossBar = function () {
 GameSounds.playSound = function (snd) {
     if(GameSounds.muted || GameSounds.forceMute || GameSounds.perc_loaded != 100)return;
 
-    if(this[snd] != null){
-        this[snd].play();
-    }
+    GameSounds.sound.play(snd);
 };
 
 GameSounds.ambientZombie = function (bool) {
@@ -958,8 +956,6 @@ GameSounds.playAmbientGeorge = function () {
 };
 
 GameSounds.init = function () {
-    GameSounds.ambientZombie(true);
-    GameSounds.ambientGeorge(true);
     GameSounds.ambientZombieDelay = 8000;
     GameSounds.ambientGeorgeDelay = 15000;
     GameSounds.soundsLoaded = 0;
@@ -967,60 +963,34 @@ GameSounds.init = function () {
     GameSounds.perc_loaded = 0;
     GameSounds.muted = false;
     GameSounds.muteThemeSong = false;
-    GameSounds.sounds = [
-        {id:'shotgun', urls: ['sound/SFX_Shotgun.ogg']},
-        {id:'pistol', urls: ['sound/SFX_Gun.ogg']},
-        {id: 'mg', urls: ['sound/SFX_MGun.ogg']},
-        {id: 'swing', urls: ['sound/SFX_Swish.ogg']},
-        {id: 'punch', urls: ['sound/SFX_Punch.ogg']},
-        {id: 'metal', urls: ['sound/SFX_Metal.ogg']},
-        {id: 'theme', urls: ['sound/Theme.ogg']},
-        {id: 'german1', urls: ['sound/Boss_apfelsaft.ogg']},
-        {id: 'german2', urls: ['sound/Boss_Nein.ogg']},
-        {id: 'german3', urls: ['sound/Boss_YA.ogg']},
-        {id: 'german4', urls: ['sound/Boss_Shukrut.ogg']},
-        {id: 'george1', urls: ['sound/George_GeorgeWashington.ogg']},
-        {id: 'george2', urls: ['sound/George_ImGeorge.ogg']},
-        {id: 'george3', urls: ['sound/George_ImGeorgeWashington.ogg']},
-        {id: 'respawn', urls: ['sound/George_Tastethepowerofgeorge.ogg']},
-        {id: 'zombie1', urls: ['sound/Zombie_Kill.ogg']},
-        {id: 'zombie2', urls: ['sound/Zombie_raarg.ogg']},
-        {id: 'zombie3', urls: ['sound/Zombie_Brains.ogg']}
-    ];
+    GameSounds.sound = new Howl({
+        urls: ['data/sounds.ogg'],
+        sprite: {
+            george1: [0, 1613],
+            george2: [1714, 1610],
+            george3: [3425, 4118],
+            german1: [7645, 1500],
+            german2: [9246, 736],
+            german3: [10083, 1003],
+            german4: [11188, 490],
+            metal: [11779, 513],
+            mg: [12394, 1508],
+            pistol: [14003, 916],
+            punch: [15020, 362],
+            respawn: [15484, 4129],
+            shotgun: [19714, 2185],
+            swing: [22000, 356],
+            theme: [22458, 48114],
+            zombie1: [70673, 3235],
+            zombie2: [74010, 1601],
+            zombie3: [75712, 2893]
+        },
 
-    GameSounds.currentID = -1;
-    GameSounds.loadNextSound = function () {
-        GameSounds.currentID++;
-        if(GameSounds.currentID>=GameSounds.sounds.length) return;
-
-        var i = GameSounds.currentID;
-
-
-        GameSounds[GameSounds.sounds[i].id] = new Howl({
-            urls: GameSounds.sounds[i].urls,
-            onload: function () {
-                GameSounds.soundsLoaded+=1;
-                GameSounds.perc_loaded = GameSounds.soundsLoaded/GameSounds.sounds.length*100;
-                GameSounds.loadNextSound();
-            },
-            loop: (GameSounds.sounds[i].id == "theme")
-        });
-
-        /*var i = GameSounds.currentID;
-
-        GameSounds[GameSounds.sounds[i].id] = soundManager.createSound({
-            id: GameSounds.sounds[i].id,
-            url: GameSounds.sounds[i].url
-        });
-
-        GameSounds[GameSounds.sounds[i].id].load({onload: function () {
-            GameSounds.soundsLoaded+=1;
-            GameSounds.perc_loaded = GameSounds.soundsLoaded/GameSounds.sounds.length*100;
-            GameSounds.loadNextSound();
-        }})*/
-    };
-
-    GameSounds.loadNextSound();
+        onload: function () {
+            console.log("loaded!");
+            GameSounds.perc_loaded = 100;
+        }
+    });
 
     //GameSounds.mute();
 

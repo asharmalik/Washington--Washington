@@ -22,6 +22,7 @@ Demo mode?
 
 
 bugs:
+mobile controls in portrait mode dont work correctly
 camera goes too far on extended display during boss fight
 Boss punch doesnt do y hit deteciton
 fix voice overlap during death?
