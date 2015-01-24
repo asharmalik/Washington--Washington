@@ -1,0 +1,5 @@
+# Ignore all sounds
+*
+
+# But not the .gitignore
+!.gitignore
