@@ -21,6 +21,7 @@ Demo mode?
 
 
 bugs:
+make adding blood into a function - make sure it gets removed after a while
 mobile controls in portrait mode dont work correctly
 camera goes too far on extended display during boss fight
 Boss punch doesnt do y hit deteciton

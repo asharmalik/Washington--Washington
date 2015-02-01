@@ -73,7 +73,7 @@ function George(hp){
     this.pulseAlpha = false;
     this.alphaDir = .05;
     this.invulnTimer = 250;
-    this.recoilSpeed = 15;
+    this.recoilSpeed = 10;
     this.exp = [0, 0, 0, 0];//0-2 guns, 3 is melee
     this.levelup = [10, 10, 10, 20];
     this.attLevels = [1, 1, 1, 1];
@@ -278,7 +278,7 @@ function George(hp){
                 this.levelHealth();
                 this.exp[3] = 0;
                 this.levelup[3]*=1.5;
-                this.recoilSpeed+=4;
+                this.recoilSpeed+=2;
                 this.kbDmg+=5;
 
                 this.maxSpeed+=1;
@@ -761,8 +761,6 @@ function Zombie(type){
                 blood.x-=45;
             }
 
-            console.log(blood.scale.x );
-
             setTimeout(function () {
                 MapManager.layer1.removeChild(blood);
              }, blood.state.current.duration*1000);
@@ -777,7 +775,7 @@ function Zombie(type){
         var that = this;
         setTimeout(function () {
             that.recoil = false;
-        },60);
+        },120);
     };
 
     this.step = function(){ //zombie AI
