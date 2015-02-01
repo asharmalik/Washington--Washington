@@ -752,11 +752,12 @@ MapManager.reset = function(){
     world.addChild(MapManager.layer1);
     stage.addChild(MapManager.layer0);
 
-    var tut = new PIXI.Sprite.fromFrame("menu.png");
+    if(!GameManager.mobile) {
+        var tut = new PIXI.Sprite.fromFrame("menu.png");
 
-    tut.y = 45;
-
-    MapManager.layer1.addChild(tut);
+        tut.y = 45;
+        MapManager.layer1.addChild(tut);
+    }
 };
 
 UIManager.updateGun = function () {
