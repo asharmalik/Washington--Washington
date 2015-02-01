@@ -986,8 +986,6 @@ GameSounds.init = function () {
         },
 
         onload: function () {
-            console.log("loaded!");
-            console.log(GameSounds.sound);
             GameSounds.perc_loaded = 100;
         }
     });

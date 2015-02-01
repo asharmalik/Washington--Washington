@@ -82,10 +82,10 @@ function George(hp){
     this.doubleJumped = false;
     this.doubleJumpHeight = 22;
 
-    this.gunranges = [500, 500, 300];
+    this.gunranges = [600, 500, 300];
     this.gunhits = [1, 1, 2];
-    this.gundmgs = [7, 5, 8];
-    this.shootDelays = [350, 150, 500];//600
+    this.gundmgs = [15, 6, 8];
+    this.shootDelays = [350, 120, 500];//600
     //power ups
 
     this.attemptJump = function () {
@@ -218,35 +218,7 @@ function George(hp){
 
         //Melee
         if(!this.attacking && !this.shooting && ControlsManager.melee()){
-            this.walking = false;
-            this.attacking = true;
-            GameSounds.playSound('swing');
-            id = Math.round(Math.random()*1+1);
-            this.sprite.state.setAnimationByName("Melee"+id, false);
-            var that = this;
-            setTimeout(function(){that.attackDone()}, this.sprite.state.current.duration*1000);
-
-            //hit test
-            var contactMade = false;
-            for(i = 0;i<ZombiesManager.zombies.length;i++){
-                if(ZombiesManager.zombies[i].dead)continue;
-                if(this.sprite.scale.x == -1){//facing left
-                    if(ZombiesManager.zombies[i].x<this.x && Math.abs(this.x-ZombiesManager.zombies[i].x)<this.kbrange && Math.abs(this.y -ZombiesManager.zombies[i].y) < 40){
-                        ZombiesManager.zombies[i].knockback();
-                        contactMade = true;
-                    }
-                }else if(this.sprite.scale.x == 1){//facing right
-                    if(ZombiesManager.zombies[i].x>=this.x && Math.abs(this.x-ZombiesManager.zombies[i].x)<this.kbrange && Math.abs(this.y -ZombiesManager.zombies[i].y) < 40){
-                        ZombiesManager.zombies[i].knockback();
-                        contactMade = true;
-                    }
-                }
-            }
-
-            if(contactMade){
-                //play melee hit sound
-                GameSounds.playSound('punch');
-            }
+            this.melee();
         }
 
         //Switching weapons
@@ -453,6 +425,38 @@ function George(hp){
 
     };
     
+    this.melee = function () {
+        this.walking = false;
+        this.attacking = true;
+        GameSounds.playSound('swing');
+        id = Math.round(Math.random()*1+1);
+        this.sprite.state.setAnimationByName("Melee"+id, false);
+        var that = this;
+        setTimeout(function(){that.attackDone()}, this.sprite.state.current.duration*1000);
+
+        //hit test
+        var contactMade = false;
+        for(i = 0;i<ZombiesManager.zombies.length;i++){
+            if(ZombiesManager.zombies[i].dead)continue;
+            if(this.sprite.scale.x == -1){//facing left
+                if(ZombiesManager.zombies[i].x<this.x && Math.abs(this.x-ZombiesManager.zombies[i].x)<this.kbrange && Math.abs(this.y -ZombiesManager.zombies[i].y) < 40){
+                    ZombiesManager.zombies[i].knockback();
+                    contactMade = true;
+                }
+            }else if(this.sprite.scale.x == 1){//facing right
+                if(ZombiesManager.zombies[i].x>=this.x && Math.abs(this.x-ZombiesManager.zombies[i].x)<this.kbrange && Math.abs(this.y -ZombiesManager.zombies[i].y) < 40){
+                    ZombiesManager.zombies[i].knockback();
+                    contactMade = true;
+                }
+            }
+        }
+
+        if(contactMade){
+            //play melee hit sound
+            GameSounds.playSound('punch');
+        }
+    }
+    
     this.setGun = function (gun) {
         if(gun == 0){
             this.sprite.skeleton.setSkinByName("Gun");
@@ -600,6 +604,10 @@ function Zombie(type){
         if(this.dead)return;
         this.health-=dmg;
 
+        if(george_char.gun == 2){
+            this.x+=this.sprite.scale.x*30;
+        }
+
         //add blood particle effect
         var blood = new PIXI.Spine("data/effects.json");
 
@@ -668,13 +676,16 @@ function Zombie(type){
         if(this.dead) return; //can't die twice!
         //gotta remove from charlist
 
+        if(!this.recoil){
+            this.speedX = 0;
+        }
+
         ZombiesManager.numZombies--;
 
-        id = (id == null)?Math.round(Math.random()*1+1):id;
+        id = (id == null)?Math.round(Math.random()+1):id;//1 to 2 if not given
 
 
         this.dead = true;
-        this.step = function () {}; //erase step function
 
         this.sprite.state.setAnimationByName("Death"+id, false);
         this.sprite.skeleton.setBonesToSetupPose();
@@ -718,10 +729,11 @@ function Zombie(type){
     };
     
     this.knockback = function () {
-        if(this.dead) return;
+        if(!this.dead) {
+            this.sprite.state.setAnimationByName("Knockback", false);
+            this.sprite.state.addAnimationByName("Walking", true);
+        }
 
-        this.sprite.state.setAnimationByName("Knockback", false);
-        this.sprite.state.addAnimationByName("Walking", true);
         this.attacking = false;
         this.recoil = true;
         if(this.hitTestID != -1){//clear hit test interval
@@ -740,18 +752,22 @@ function Zombie(type){
             blood.state.setAnimationByName("Blood");
 
             blood.scale.x = -george_char.sprite.scale.x;
-            blood.x = this.x+Math.random()*5-10 - blood.scale.x*5;
+            blood.x = this.x+Math.random()*5-10;
             blood.y = this.y-30+Math.random()*5;
 
+            if(blood.scale.x == -1){//facing right so move blood right
+                blood.x+=45;
+            }else{
+                blood.x-=45;
+            }
 
-            /*setTimeout(function () {
+            console.log(blood.scale.x );
 
-             //world.removeChild(blood);
-             }, blood.state.current.duration*1000);*/
+            setTimeout(function () {
+                MapManager.layer1.removeChild(blood);
+             }, blood.state.current.duration*1000);
 
             MapManager.layer1.addChild(blood);
-        }else{
-            //this.speedX*=2;
         }
 
         if(this.health<=0){
@@ -761,56 +777,60 @@ function Zombie(type){
         var that = this;
         setTimeout(function () {
             that.recoil = false;
-        },750);
+        },60);
     };
 
     this.step = function(){ //zombie AI
-        if(!george_char.dead && !this.recoil && !this.attacking && this.x<george_char.x && this.x+this.offsetX<george_char.x){//need to move right
-            this.walking = true;
-            if(this.speedX < this.maxSpeed)this.speedX++;
-            this.sprite.scale.x = -1;
-        }else if(!george_char.dead && !this.recoil && !this.attacking && this.x>george_char.x && this.x-this.offsetX>george_char.x){//need to move left
-            if(this.speedX > -this.maxSpeed)this.speedX--;
-            this.walking = true;
-            this.sprite.scale.x = 1;
-        }else if(!this.recoil && !this.attacking && !george_char.dead){//check to see if char is within range
-            if(Math.abs(george_char.y-this.y) < 80) {
-                this.walking = false;
-                this.attacking = true;
-                this.sprite.state.setAnimationByName("PreAttack", false);
-                this.sprite.state.addAnimationByName("Attack", true, 0);
-
-                var that = this;
-                this.hitTestID = setTimeout(function () {
-                    that.hitTestChar();
-                }, this.sprite.state.current.duration*1000);
-            }else{//character is above or below zombie
-                this.speedX = -this.sprite.scale.x;
+        if(!this.dead) {
+            if (!george_char.dead && !this.recoil && !this.attacking && this.x < george_char.x && this.x + this.offsetX < george_char.x) {//need to move right
                 this.walking = true;
-            }
-        }else if(this.attacking && !this.stoppingAttack && (Math.abs(this.x-george_char.x) > this.offsetX || george_char.dead)){//character has moved too far
-            var that = this;
-            this.stoppingAttack = true;
-            if(this.hitTestID != -1){
-                clearTimeout(this.hitTestID);
-                this.hitTestID = -1;
-            }
-            setTimeout(function(){(that.stopAttack())}, 500+Math.random()*700);
-        }else if(this.attacking){
-            this.sprite.scale.x = (george_char.x<this.x)? 1: -1;//set direction while attacking
-        }else if(!this.recoil && george_char.dead && ( (this.speedX>0 && this.x>george_char.x+this.mobbingRange || this.speedX<0 && this.x<george_char.x-this.mobbingRange) || this.speedX == 0)){//mobbing
-            //mobbing when dead
-            this.walking = true;
-            if(george_char.x<this.x){
-                this.speedX = -this.maxSpeed;
-                this.sprite.scale.x = 1;
-            }else{
-                this.speedX = this.maxSpeed;
+                if (this.speedX < this.maxSpeed)this.speedX++;
                 this.sprite.scale.x = -1;
+            } else if (!george_char.dead && !this.recoil && !this.attacking && this.x > george_char.x && this.x - this.offsetX > george_char.x) {//need to move left
+                if (this.speedX > -this.maxSpeed)this.speedX--;
+                this.walking = true;
+                this.sprite.scale.x = 1;
+            } else if (!this.recoil && !this.attacking && !george_char.dead) {//Attack! Check to see if char is within range
+                if (Math.abs(george_char.y - this.y) < 80) {
+                    this.walking = false;
+                    this.attacking = true;
+                    this.sprite.state.setAnimationByName("PreAttack", false);
+                    this.sprite.state.addAnimationByName("Attack", true, 0);
+
+                    var that = this;
+                    this.hitTestID = setTimeout(function () {
+                        that.hitTestChar();
+                    }, this.sprite.state.current.duration * 1000);
+                } else {//character is above or below zombie
+                    this.speedX = -this.sprite.scale.x;
+                    this.walking = true;
+                }
+            } else if (this.attacking && !this.stoppingAttack && (Math.abs(this.x - george_char.x) > this.offsetX || george_char.dead)) {//character has moved too far
+                var that = this;
+                this.stoppingAttack = true;
+                if (this.hitTestID != -1) {
+                    clearTimeout(this.hitTestID);
+                    this.hitTestID = -1;
+                }
+                setTimeout(function () {
+                    (that.stopAttack())
+                }, 500 + Math.random() * 700);
+            } else if (this.attacking) {
+                this.sprite.scale.x = (george_char.x < this.x) ? 1 : -1;//set direction while attacking
+            } else if (!this.recoil && george_char.dead && ( (this.speedX > 0 && this.x > george_char.x + this.mobbingRange || this.speedX < 0 && this.x < george_char.x - this.mobbingRange) || this.speedX == 0)) {//mobbing
+                //mobbing when dead
+                this.walking = true;
+                if (george_char.x < this.x) {
+                    this.speedX = -this.maxSpeed;
+                    this.sprite.scale.x = 1;
+                } else {
+                    this.speedX = this.maxSpeed;
+                    this.sprite.scale.x = -1;
+                }
             }
         }
 
-        if(!this.walking && this.speedX != 0){
+        if(!this.walking && this.speedX != 0 && !this.recoil){
             this.speedX-=Math.abs(this.speedX)/this.speedX;
         }
 
@@ -822,7 +842,7 @@ Boss.prototype = new base_char();
 Boss.prototype.constructor = Boss;
 
 function Boss(){
-    this.health = 20;//5000
+    this.health = 5000;//5000
     this.setSprite("data/RoboHitler.json");
     this.sprite.skeleton.setSkinByName("Normal");
     this.sprite.skeleton.setSlotsToSetupPose();
@@ -884,7 +904,7 @@ function Boss(){
 
         setTimeout(function(){
             that.hitTestPunch();
-        }, 200);
+        }, 400);
 
         setTimeout(function () {
             that.attacking = false;
