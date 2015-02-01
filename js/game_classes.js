@@ -618,10 +618,10 @@ function Zombie(type){
         blood.y = this.y-30+Math.random()*5;
 
 
-        /*setTimeout(function () {
+        setTimeout(function () {
 
-            //world.removeChild(blood);
-        }, blood.state.current.duration*1000);*/
+            MapManager.layer1.removeChild(blood);
+        }, blood.state.current.duration*20000);
 
         MapManager.layer1.addChild(blood);
 
