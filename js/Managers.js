@@ -988,6 +988,11 @@ GameSounds.init = function () {
 
         onload: function () {
             GameSounds.perc_loaded = 100;
+        },
+        onloaderror: function () {
+            GameSounds.forceMute = true;
+            GameSounds.perc_loaded = 100; //gotta do what you gotta do
+            console.log("Encountered an error loading sounds!");
         }
     });
 
@@ -1000,8 +1005,6 @@ GameSounds.init = function () {
     });
 
     //GameSounds.mute();
-
-    var that = this;
 };
 
 GameSounds.mute = function () {

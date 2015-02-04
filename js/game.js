@@ -24,7 +24,7 @@ var assets = ["data/nazi.json", "data/nazipacked.json", "data/George.json", "dat
 
 loader = new PIXI.AssetLoader(assets, false);
 
-loader.onProgress = onProgress;
+loader.onProgress = onAssetsProgress;
 loader.load();
 
 var world = new PIXI.DisplayObjectContainer();
@@ -69,11 +69,12 @@ function onAssetsLoaded()
     GameManager.beginGame1();
 }
 
-function onProgress(){
+function onAssetsProgress(){
     perc_assets_loaded = (assets.length - loader.loadCount) / assets.length * 100; //update real-time percent
 }
 
 function update_loader(){
+    //console.log("assets: "+perc_assets_loaded+", sounds: "+GameSounds.perc_loaded);
     perc_loaded = (perc_assets_loaded+GameSounds.perc_loaded)/2;//GameSounds.perc_loaded
     while(displayed_perc<perc_loaded) displayed_perc+=1;
 
