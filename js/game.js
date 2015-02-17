@@ -74,7 +74,6 @@ function onAssetsProgress(){
 }
 
 function update_loader(){
-    //console.log("assets: "+perc_assets_loaded+", sounds: "+GameSounds.perc_loaded);
     perc_loaded = (perc_assets_loaded+GameSounds.perc_loaded)/2;//GameSounds.perc_loaded
     while(displayed_perc<perc_loaded) displayed_perc+=1;
 

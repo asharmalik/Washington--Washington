@@ -9,6 +9,7 @@ ControlsManager = {};
 GameManager = {};
 GameManager.stage1 = {};
 GameManager.debugMode = false;
+GameManager.native = false;
 
 GameManager.toggleDebug = function () {
     GameManager.debugMode = !GameManager.debugMode;
@@ -965,7 +966,7 @@ GameSounds.init = function () {
     GameSounds.muted = false;
     GameSounds.muteThemeSong = false;
     GameSounds.sound = new Howl({
-        urls: ['data/sound/sounds.ogg'],
+        urls: ['data/sound/sounds.ogg', 'data/sound/sounds.mp3'],
         sprite: {
             george1: [0, 1613],
             george2: [1714, 1610],
@@ -988,6 +989,7 @@ GameSounds.init = function () {
 
         onload: function () {
             GameSounds.perc_loaded = 100;
+            GameSounds.ambientZombie(true);
         },
         onloaderror: function () {
             GameSounds.forceMute = true;
@@ -1034,7 +1036,7 @@ ScreenManager.init = function () {
     ScreenManager.lastFSRes = 1;
 
     ScreenManager.loop = function(){
-        if(screenfull.isFullscreen){
+        if(screenfull.isFullscreen || GameManager.native){
 
             if(window.innerHeight<window.innerWidth) {//landscape mode
                 scale = window.innerHeight / ScreenManager.stageHeight;
@@ -1075,10 +1077,6 @@ ScreenManager.init = function () {
             if (!screenfull.isFullscreen) {
                 screenfull.request();
             }
-            /*
-                screenfull.exit();
-                renderer.resolution = 1;
-            }*/
         }
     })
 }
