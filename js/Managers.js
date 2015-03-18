@@ -449,6 +449,7 @@ MapManager.manageMap = function() {//called every so often to build the map ahea
             } else {
                 MapManager.startFinale();
                 MapManager.buildFinale(MapManager.proccessedX);
+
                 break;
             }
         }
@@ -533,11 +534,18 @@ MapManager.manageMap = function() {//called every so often to build the map ahea
     }
 };
 
-MapManager.stopBridgeFinale = function () {
+MapManager.checkStopBridgeFinale = function () {
+    console.log(ZombiesManager.numZombies);
     ZombiesManager.maxZombies = 0;
-    MapManager.proceedToBoss = true;
-    GameSounds.ambientZombie(false);
-};
+
+    if (ZombiesManager.numZombies > 0) {
+        setTimeout(MapManager.checkStopBridgeFinale, 250);
+    }else{
+        MapManager.proceedToBoss = true;
+        GameSounds.ambientZombie(false);
+    }
+}
+
 
 MapManager.fadeInPrepForElevator = function (){ //fades layer3 and 4
     MapManager.layer2.alpha -= .1;//3, 4
@@ -644,12 +652,13 @@ MapManager.step = function(){
         MapManager.layer5.x = world.x / 100;
     }
 
+    //TODO: REMOVE
     if(MapManager.finale && !MapManager.atBridge){
-        if(george_char.rightLimit - george_char.x< 20){
+        if(george_char.rightLimit - george_char.x < 350){
             //end bridge scene
             MapManager.atBridge = true;
+            setTimeout(MapManager.checkStopBridgeFinale, MapManager.bridgeFinaleLength);
             MapManager.fadeInPrepForElevator();
-            setTimeout(MapManager.stopBridgeFinale, MapManager.bridgeFinaleLength);//after 5 seconds
         }
     }
     if(MapManager.finale && MapManager.focusRight && !MapManager.onElevator){//finale over
@@ -1006,7 +1015,7 @@ GameSounds.init = function () {
         }
     });
 
-    //GameSounds.mute();
+    GameSounds.mute();
 };
 
 GameSounds.mute = function () {

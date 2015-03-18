@@ -1,4 +1,5 @@
 Boss fight:
+HP Bar
 Mustache flash red on hit
 collision with boss
 Gun
@@ -7,7 +8,6 @@ Gun
 Effects:
 make enemies flash white on hit
 shells
-fix shotgun volume
 different volume levels for metal ricochet depending on gun
 
 
@@ -16,8 +16,7 @@ Etc:
 Add mute button
 Spine wrapper?
 bg disappeared for boss fight
-create alternative mp3 to ogg
-Demo mode?
+Add multiplayer mode
 
 
 bugs:
@@ -26,4 +25,3 @@ mobile controls in portrait mode dont work correctly
 camera goes too far on extended display during boss fight
 Boss punch doesnt do y hit deteciton
 fix voice overlap during death?
-fix zombies having to die after certain time on bridge

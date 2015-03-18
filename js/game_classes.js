@@ -143,6 +143,10 @@ function George(hp){
 
                     if (!this.inAir) {
                         this.sprite.state.setAnimationByName("Walking", true);
+                        //TODO: Fix gun getting stuck in up position
+                        this.sprite.skeleton.setSlotsToSetupPose();
+                        this.sprite.skeleton.setBonesToSetupPose();
+                        this.sprite.skeleton.setToSetupPose();
                     }
                 }
                 this.sprite.scale.x = -1;
@@ -372,6 +376,9 @@ function George(hp){
 
         world.addChild(shooting);
 
+        if(this.walking){ //get rid of gun setting stuck in shooting pose while walking
+            this.sprite.skeleton.setSlotsToSetupPose();
+        }
 
         //hittest zombies
         if(!MapManager.proceedToBoss && !MapManager.bossFight) {
