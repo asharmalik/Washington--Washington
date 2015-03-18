@@ -50,7 +50,7 @@ GameManager.beginGame1 = function(){
     //add fps text
     fps_txt = new PIXI.Text("FPS: x", {font:"12px Arial", fill:"white"});
 
-    //GameManager.toggleDebug();
+    GameManager.toggleDebug();
     requestAnimFrame(GameManager.stage1.step);
 };
 
@@ -59,7 +59,7 @@ GameManager.stage1.step = function () {
     var fps = Math.round(1000 / (thisLoop - lastLoop));
 
     lastLoop = thisLoop;
-    fps_txt.setText("FPS: "+fps);
+    //fps_txt.setText("FPS: "+fps);
 
     GameManager.stage1.simulateGravity();
     GameManager.stage1.handleChar();
@@ -535,7 +535,6 @@ MapManager.manageMap = function() {//called every so often to build the map ahea
 };
 
 MapManager.checkStopBridgeFinale = function () {
-    console.log(ZombiesManager.numZombies);
     ZombiesManager.maxZombies = 0;
 
     if (ZombiesManager.numZombies > 0) {
@@ -614,9 +613,11 @@ MapManager.elevatorStep = function () {
         PlatformManager.freeze = false;
 
         george_char.leftLimit = george_char.x - 130;
-        george_char.rightLimit = george_char.leftLimit+1880;
+        george_char.rightLimit = george_char.leftLimit+1900;
         MapManager.cameraLeftX = -(george_char.x-296);
-        MapManager.cameraRightX = -(george_char.x+1250);
+        MapManager.cameraRightX = -(george_char.x+1250 - (ScreenManager.stageWidth - 704)); //xxx
+        //console.log(ScreenManager.stageWidth);
+        //fps_txt.setText("FPS: "+ScreenManager.stageWidth);
 
         MapManager.focusRight = false;
         MapManager.spawnBoss();
@@ -908,7 +909,6 @@ UIManager.step = function () {
 };
 
 UIManager.createBossBar = function () {
-    return;
     this.bossBar = new PIXI.DisplayObjectContainer();
     this.bossBar.fill = new PIXI.Sprite.fromFrame("HitHPFill.png");
     this.bossBar.back = new PIXI.Sprite.fromFrame("HitHPBack.png");
@@ -916,11 +916,14 @@ UIManager.createBossBar = function () {
     this.bossBar.addChild(this.bossBar.back);
     this.bossBar.addChild(this.bossBar.fill);
 
-    this.bossBar.fill.x = 25;
-    this.bossBar.fill.y = ScreenManager.stageHeight-15;
+    this.bossBar.fill.x = 6;
+    this.bossBar.fill.y = -5;
 
-    this.bossBar.back.x = 25;
-    this.bossBar.back.y = ScreenManager.stageHeight-20;
+    this.bossBar.back.y = -10;
+
+    this.bossBar.x = 25;
+    this.bossBar.y = ScreenManager.stageHeight - 20;
+
 
     stage.addChild(this.bossBar);
 };
