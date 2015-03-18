@@ -921,7 +921,7 @@ UIManager.createBossBar = function () {
 
     this.bossBar.back.y = -10;
 
-    this.bossBar.x = 25;
+    this.bossBar.x = 25 + Math.round(ScreenManager.stageWidth - 704)/2;
     this.bossBar.y = ScreenManager.stageHeight - 20;
 
 
