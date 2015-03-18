@@ -896,7 +896,7 @@ function Boss(){
     };
 
     this.hitTestPunch = function () {
-        if(Math.abs(this.x-george_char.x)<200){
+        if(Math.abs(this.x-george_char.x)<200 && Math.abs(this.y-george_char.y)<180){
             george_char.hit(this.punchDamage);
             george_char.speedX = -this.sprite.scale.x*10;//knockback
         }
