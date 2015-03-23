@@ -23,6 +23,10 @@ var Key = {
 
     onKeyup: function(event) {
         delete this._pressed[event.keyCode];
+    },
+    
+    forceUp: function (keyCode) {
+        delete this._pressed[keyCode];
     }
 };
 

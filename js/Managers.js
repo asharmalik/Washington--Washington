@@ -23,6 +23,9 @@ GameManager.toggleDebug = function () {
         MapManager.bridgeFinaleLength = 1000;
         GameSounds.muteThemeSong = true;
     } else {
+        george_char.acc = 2;
+        george_char.maxSpeed = 6;
+        george_char.jumpHeight = -16;
         GameSounds.muteThemeSong = false;
         stage.removeChild(fps_txt);
     }
@@ -116,9 +119,14 @@ GameManager.stage1.step = function () {
 
     //-----------------------------------
 
-    //could add y dimension too (maybe taller maps somewhere along the point?
+    if(Key.isDown(192)){//`
+        Key.forceUp(192);
+        GameManager.toggleDebug();
+    }
 
     requestAnimFrame(GameManager.stage1.step);
+
+    //TODO: remove comment
     //setTimeout(animate, 200);//30 fps
 
 

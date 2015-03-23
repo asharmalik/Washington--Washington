@@ -22,5 +22,4 @@ Add multiplayer mode
 bugs:
 sound doesnt work on IE
 mobile controls in portrait mode dont work correctly
-Boss punch doesnt do y hit deteciton
 fix voice overlap during death?
