@@ -1,8 +1,5 @@
 Boss fight:
-HP Bar
-Mustache flash red on hit
-collision with boss
-Gun
+AI
 =====
 
 Effects:

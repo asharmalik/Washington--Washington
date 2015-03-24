@@ -887,7 +887,7 @@ function Boss(){
 
         //boss AI
         if(!this.attacking){
-            this.shoot();
+            //this.shoot();
         }
 
 
@@ -972,7 +972,9 @@ function Boss(){
     };
 
     this.taunt = function () {
+        console.log("taunting");
         this.sprite.state.setAnimationByName("Taunt");
+        this.attacking = true;
 
         var that = this;
 
