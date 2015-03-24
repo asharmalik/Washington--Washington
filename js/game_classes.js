@@ -425,8 +425,9 @@ function George(hp){
         //hittest boss
         if(MapManager.hitler != null){//boss fight
             if(this.y-MapManager.hitler.y>=-80 && ((george_char.sprite.scale.x == 1 && this.x<MapManager.hitler.x) || (george_char.sprite.scale.x == -1 && this.x>MapManager.hitler.x))){
-                GameSounds.playSound('metal');
-                MapManager.hitler.damage(this.gundmgs[this.gun]);
+                if(MapManager.hitler.damage(this.gundmgs[this.gun])){ //only play sound if he is hurt
+                    GameSounds.playSound('metal');
+                }
             }
         }
 
@@ -975,37 +976,38 @@ function Boss(){
     };
 
     this.damage = function (amount) {
-        if(this.dead || this.waitingForGeorge)return;
+        if(this.dead || this.waitingForGeorge)return false;
         this.health-=amount;
 
         //dying
         if(this.health<=0){
             this.health = 0;
             this.die();
-            return;
+            return true;
         }
 
-        return;
 
-        /*if(this.hitTimerID != -1)return;//mustache already red
+        console.log(this.hitTimerID);
+        if(this.hitTimerID == -1) {
+            console.log("set to hit");
+            this.sprite.skeleton.setSkinByName("Hit");
+            this.sprite.skeleton.setSlotsToSetupPose();
+        }
 
-        this.sprite.skeleton.setSkinByName("Hit");
-        this.sprite.skeleton.setSlotsToSetupPose();
-
-
-        if(this.hitTimerID != -1){
+        if(this.hitTimerID != -1){ //previous timer already in effect
             clearTimeout(this.hitTimerID);
         }
 
         var that = this;
 
         this.hitTimerID = setTimeout(function () {
-            that.setSprite("data/RoboHitler.json");
+            //that.setSprite("data/RoboHitler.json");
             that.sprite.skeleton.setSkinByName("Normal");
+            that.sprite.skeleton.setSlotsToSetupPose();
             that.hitTimerID = -1;
-        }, 500);*/
+        }, 90);
 
-
+        return true;
     }
 
 }
