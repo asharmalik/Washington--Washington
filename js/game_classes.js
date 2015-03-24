@@ -47,10 +47,10 @@ function base_char(pixiLoc, hp){
 
 George.prototype = new base_char();
 George.prototype.constructor = George;
-function George(hp){
+function George(){
     this.setSprite("data/George.json");
-    this.health = hp;
-    this.maxHealth = hp;
+    this.maxHealth = 150;
+    this.health = this.maxHealth;
     this.jumpHeight = -16;
     this.onPlatform = false;
     this.walking = false;
@@ -723,7 +723,7 @@ function Zombie(type){
     };
 
     this.hitTestID = -1;
-    this.hitTestChar = function () {
+    this.hitTestChar = function () { //zombie hit test
         this.hitTestID = -1;
         if(!this.attacking || this.dead)return;
         if(george_char.x-this.x < this.attackRange && Math.abs(george_char.y-this.y)<40){
@@ -862,11 +862,12 @@ function Boss(){
     this.speed = 3;
     this.dead = false;
     this.hitTimerID = -1;
-    this.followFor = 0;
     this.punchDamage = 10;
     this.waitingForGeorge = true;
+    this.gunDmg = 10;
 
     this.step = function () {//AI
+        //MapManager.hitler.y = george_char.y; //unncessary
         if(this.dead)return;
         if(this.waitingForGeorge && Math.abs(george_char.x-this.x) < 300){
             this.waitingForGeorge = false;
@@ -878,27 +879,17 @@ function Boss(){
         if(this.waitingForGeorge) return;
 
         if(this.x<george_char.x){
-            this.sprite.scale.x= -1;
+            this.sprite.scale.x = -1;
         }else{
-            this.sprite.scale.x= 1;
+            this.sprite.scale.x = 1;
         }
-        if(this.followFor>0){
-            this.followFor--;
-            //follow
-            if(this.x<george_char.x-50){
-                this.x+=this.speed;
 
-            }
-            if(this.x>george_char.x+50){
-                this.x-=this.speed;
-            }
-        }else if(Math.random()<.3){
-            this.followFor = Math.round(Math.random()*60+30);//.5-1.5 seconds
+        //boss AI
+        if(!this.attacking){
+            this.shoot();
         }
-        if(!this.attacking && this.followFor <= 0){
-            this.attacking = true;
-            this.punch();
-        }
+
+
     };
 
     
@@ -916,13 +907,16 @@ function Boss(){
     
     this.punch = function () {
         this.sprite.state.setAnimationByName("Hit1");
+        this.attacking = true;
 
         var that = this;
 
+        //initiate punching hit test
         setTimeout(function(){
             that.hitTestPunch();
         }, 400);
 
+        //set attacking to false
         setTimeout(function () {
             that.attacking = false;
             that.idle();
@@ -931,10 +925,11 @@ function Boss(){
     
     this.shoot = function () {
         this.sprite.state.setAnimationByName("Hit2");
+        this.attacking = true;
 
         var ball = new PIXI.Sprite.fromFrame("HitBall.png");
-        ball.x = this.x;
-        ball.y = this.y;
+        ball.x = this.x + ((this.sprite.scale.x == 1)?-230:100);//1 = facing left
+        ball.y = this.y-150;
 
         if(this.sprite.scale.x == 1){//left
             ball.speedX = -20;
@@ -942,25 +937,37 @@ function Boss(){
             ball.speedX = 20;
         }
 
-        console.log("ball");
 
         ball.step = function () {
             this.x+=this.speedX;
 
-            var that = this;
-            ball.timer = setTimeout(function(){that.step()}, 30);
+            //ball hit test character
+            if(Math.abs(this.x + 50 - george_char.x)<30 && this.y<george_char.y && this.y+this.height>george_char.y - george_char.sprite.height){
+                world.removeChild(this);
+                //TODO: explosion effect
+
+                george_char.hit(MapManager.hitler.gunDmg);
+                return;
+            }
+
+            if(Math.abs(this.x-george_char.x) > 500){//TODO: 3000
+                world.removeChild(this);
+                return;
+            }
+
+            ball.timer = setTimeout(function(){ball.step()}, 30);
         };
 
         ball.timer = setTimeout(function(){ball.step()}, 30);
 
         world.addChild(ball);
 
-
         var that = this;
         setTimeout(function () {
             that.attacking = false;
             that.idle();
-        }, this.sprite.state.current.duration*1000);
+
+        }, this.sprite.state.current.duration*1000*5);
     };
 
     this.die = function () {
@@ -987,9 +994,7 @@ function Boss(){
         }
 
 
-        console.log(this.hitTimerID);
         if(this.hitTimerID == -1) {
-            console.log("set to hit");
             this.sprite.skeleton.setSkinByName("Hit");
             this.sprite.skeleton.setSlotsToSetupPose();
         }
@@ -1001,7 +1006,6 @@ function Boss(){
         var that = this;
 
         this.hitTimerID = setTimeout(function () {
-            //that.setSprite("data/RoboHitler.json");
             that.sprite.skeleton.setSkinByName("Normal");
             that.sprite.skeleton.setSlotsToSetupPose();
             that.hitTimerID = -1;

@@ -10,20 +10,23 @@ GameManager = {};
 GameManager.stage1 = {};
 GameManager.debugMode = false;
 GameManager.native = false;
+GameManager.paused = false;
 
 GameManager.toggleDebug = function () {
     GameManager.debugMode = !GameManager.debugMode;
 
     if (GameManager.debugMode) {
         stage.addChild(fps_txt);
-        george_char.acc = 6;
-        george_char.maxSpeed = 30;
+        george_char.acc = 4;
+        george_char.maxSpeed = 20;
         george_char.jumpHeight = -24;
         MapManager.randomLength = 4000;//30000
         MapManager.bridgeFinaleLength = 1000;
         GameSounds.muteThemeSong = true;
         GameSounds.mute();
+        ZombiesManager.maxZombies = 0;
     } else {
+        ZombiesManager.maxZombies = 10;
         george_char.acc = 2;
         george_char.maxSpeed = 6;
         george_char.jumpHeight = -16;
@@ -35,7 +38,7 @@ GameManager.toggleDebug = function () {
 
 GameManager.beginGame1 = function(){
     PlatformManager.reset();
-    george_char = new George(100);
+    george_char = new George();
 
     george_char.x = 300;
     george_char.y = 300;
@@ -57,7 +60,7 @@ GameManager.beginGame1 = function(){
 
     GameManager.toggleDebug();
 
-    MapManager.spawnBoss();
+    //MapManager.spawnBoss();
     requestAnimFrame(GameManager.stage1.step);
 };
 
@@ -129,10 +132,14 @@ GameManager.stage1.step = function () {
         GameManager.toggleDebug();
     }
 
-    requestAnimFrame(GameManager.stage1.step);
+    if(!GameManager.paused) {
+        requestAnimFrame(GameManager.stage1.step);
+    }
 
-    //TODO: remove comment
-    //setTimeout(animate, 200);//30 fps
+    ////TODO: remove comment
+    //setTimeout(function () {
+    //    requestAnimFrame(GameManager.stage1.step);
+    //}, 200);//slow game down
 
 
     renderer.render(stage);
