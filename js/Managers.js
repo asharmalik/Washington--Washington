@@ -57,7 +57,7 @@ GameManager.beginGame1 = function(){
 
     GameManager.toggleDebug();
 
-    //MapManager.spawnBoss();
+    MapManager.spawnBoss();
     requestAnimFrame(GameManager.stage1.step);
 };
 
@@ -688,7 +688,7 @@ MapManager.step = function(){
         george_char.rightLimit = MapManager.proccessedX+150;
         MapManager.focusRight = true;
     }
-    if(MapManager.bossFight){//Map handling only during boss fight. Once goerge is off elevator
+    if(MapManager.hitler){
         MapManager.hitler.step();
 
     }
