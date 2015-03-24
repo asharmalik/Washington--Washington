@@ -872,6 +872,7 @@ function Boss(){
         if(this.waitingForGeorge && Math.abs(george_char.x-this.x) < 300){
             this.waitingForGeorge = false;
             //taunt
+            this.taunt();
             UIManager.createBossBar();
         }
 
@@ -967,9 +968,20 @@ function Boss(){
             that.attacking = false;
             that.idle();
 
-        }, this.sprite.state.current.duration*1000*5);
+        }, this.sprite.state.current.duration*1000);
     };
 
+    this.taunt = function () {
+        this.sprite.state.setAnimationByName("Taunt");
+
+        var that = this;
+
+        setTimeout(function () {
+            that.attacking = false;
+            that.idle();
+        }, this.sprite.state.current.duration*1000);
+    }
+    
     this.die = function () {
         if(this.dead)return;
         if(this.stateTimer != -1){
