@@ -11,6 +11,7 @@ GameManager.stage1 = {};
 GameManager.debugMode = false;
 GameManager.native = false;
 GameManager.paused = false;
+GameManager.zombiesDisabled = false;
 
 GameManager.toggleDebug = function () {
     GameManager.debugMode = !GameManager.debugMode;
@@ -24,9 +25,9 @@ GameManager.toggleDebug = function () {
         MapManager.bridgeFinaleLength = 1000;
         GameSounds.muteThemeSong = true;
         GameSounds.mute();
-        ZombiesManager.maxZombies = 0;
+        ZombiesManager.disabled = true;
     } else {
-        ZombiesManager.maxZombies = 10;
+        ZombiesManager.disabled = false;
         george_char.acc = 2;
         george_char.maxSpeed = 6;
         george_char.jumpHeight = -16;
@@ -58,7 +59,7 @@ GameManager.beginGame1 = function(){
     //add fps text
     fps_txt = new PIXI.Text("FPS: x", {font:"12px Arial", fill:"white"});
 
-    GameManager.toggleDebug();
+    //GameManager.toggleDebug();
 
     //MapManager.spawnBoss();
     requestAnimFrame(GameManager.stage1.step);
@@ -170,6 +171,7 @@ GameManager.stage1.simulateGravity = function () {
     }
 };
 
+ZombiesManager.disabled = false;
 
 ZombiesManager.handleZombies = function () {
     var zombie;
@@ -186,6 +188,9 @@ ZombiesManager.handleZombies = function () {
 };
 
 ZombiesManager.createZombieAt = function (_x, _y, type) {
+    if(ZombiesManager.disabled){
+        return;
+    }
     var zombie;
     if(george_char.x>10000) {
         zombieType = (type == null) ? Math.round(Math.random() * 1 + 1) : type;
@@ -198,6 +203,7 @@ ZombiesManager.createZombieAt = function (_x, _y, type) {
     zombie.y = _y;
     zombie.setMask(true);
 
+    ZombiesManager.numZombies++;
     ZombiesManager.zombies.push(zombie);
     zombie.addToWorld();
 };
@@ -211,8 +217,9 @@ ZombiesManager.manageZombies = function(){
 
     if(PlatformManager.platforms == 0)return;//safety
 
+    //kill trailing zombies, sorry bros
     for(i=0;i<ZombiesManager.zombies.length;i++){
-        if(ZombiesManager.zombies[i].x < george_char.x  -ScreenManager.stageWidth/2 - 100){//kill trailing zombies, sorry bros
+        if(ZombiesManager.zombies[i].x < george_char.x  -ScreenManager.stageWidth/2 - 100){
             ZombiesManager.zombies[i].die();
         }
     }
@@ -220,7 +227,7 @@ ZombiesManager.manageZombies = function(){
 
     if(ZombiesManager.numZombies >= ZombiesManager.maxZombies)return;
 
-
+    //Add random amount of zombies
     for(i=0;i<numToAdd;i++){
         randPlat = Math.round(Math.random()*(PlatformManager.platforms.length-1));
 
@@ -240,7 +247,7 @@ ZombiesManager.manageZombies = function(){
             zombieX = Math.round(Math.random()*((platform.x2+5)-(platform.x1-5))+platform.x1);
         }
 
-        ZombiesManager.numZombies++;
+
         ZombiesManager.createZombieAt(zombieX , platform.y);
     }
 };
