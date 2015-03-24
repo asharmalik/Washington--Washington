@@ -847,7 +847,9 @@ Boss.prototype = new base_char();
 Boss.prototype.constructor = Boss;
 
 function Boss(){
-    this.health = 5000;//5000
+    this.maxHealth = 5000; //5000
+    this.health = this.maxHealth;
+
     this.setSprite("data/RoboHitler.json");
     this.sprite.skeleton.setSkinByName("Normal");
     this.sprite.skeleton.setSlotsToSetupPose();

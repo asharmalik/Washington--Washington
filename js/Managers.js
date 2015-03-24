@@ -22,12 +22,14 @@ GameManager.toggleDebug = function () {
         MapManager.randomLength = 4000;//30000
         MapManager.bridgeFinaleLength = 1000;
         GameSounds.muteThemeSong = true;
+        GameSounds.mute();
     } else {
         george_char.acc = 2;
         george_char.maxSpeed = 6;
         george_char.jumpHeight = -16;
         GameSounds.muteThemeSong = false;
         stage.removeChild(fps_txt);
+        GameSounds.mute(); //unmute
     }
 };
 
@@ -119,6 +121,7 @@ GameManager.stage1.step = function () {
 
     //-----------------------------------
 
+    //toggle debug
     if(Key.isDown(192)){//`
         Key.forceUp(192);
         GameManager.toggleDebug();
@@ -914,6 +917,10 @@ UIManager.createUI = function () {
 UIManager.step = function () {
     this.hpBar.maskSprite.scale.x = george_char.health/george_char.maxHealth;
     this.expBar.fill.scale.x = george_char.exp[george_char.gun]/george_char.levelup[george_char.gun];
+
+    if(this.bossBar){
+        console.log(MapManager.hitler.health);
+    }
 };
 
 UIManager.createBossBar = function () {
@@ -1026,7 +1033,7 @@ GameSounds.init = function () {
         }
     });
 
-    GameSounds.mute();
+
 };
 
 GameSounds.mute = function () {
@@ -1034,6 +1041,7 @@ GameSounds.mute = function () {
     if(GameSounds.muted){
         Howler.mute();
     }else{
+        Howler.unmute();
         //begin theme song
         GameSounds.beginThemeSong();
     }
