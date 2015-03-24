@@ -56,6 +56,8 @@ GameManager.beginGame1 = function(){
     fps_txt = new PIXI.Text("FPS: x", {font:"12px Arial", fill:"white"});
 
     GameManager.toggleDebug();
+
+    //MapManager.spawnBoss();
     requestAnimFrame(GameManager.stage1.step);
 };
 
@@ -578,11 +580,10 @@ MapManager.spawnBoss = function () {//called when elevator stops
 
     george_char.doubleJump = true;
 
-    MapManager.hitler.x = george_char.x+800;
+    MapManager.hitler.x = george_char.x+700;
     MapManager.hitler.y = george_char.y;
 
     MapManager.hitler.addToWorld();
-    UIManager.createBossBar();
 };
 
 MapManager.elevatorRide = function () {//begin elevator ride
@@ -626,9 +627,7 @@ MapManager.elevatorStep = function () {
         george_char.leftLimit = george_char.x - 130;
         george_char.rightLimit = george_char.leftLimit+1900;
         MapManager.cameraLeftX = -(george_char.x-296);
-        MapManager.cameraRightX = -(george_char.x+1250 - (ScreenManager.stageWidth - 704)); //xxx
-        //console.log(ScreenManager.stageWidth);
-        //fps_txt.setText("FPS: "+ScreenManager.stageWidth);
+        MapManager.cameraRightX = -(george_char.x+1250 - (ScreenManager.stageWidth - 704));
 
         MapManager.focusRight = false;
         MapManager.spawnBoss();
@@ -919,7 +918,8 @@ UIManager.step = function () {
     this.expBar.fill.scale.x = george_char.exp[george_char.gun]/george_char.levelup[george_char.gun];
 
     if(this.bossBar){
-        console.log(MapManager.hitler.health);
+        this.bossBar.fill.scale.x = MapManager.hitler.health / MapManager.hitler.maxHealth;
+        //console.log(MapManager.hitler.health);
     }
 };
 

@@ -847,7 +847,7 @@ Boss.prototype = new base_char();
 Boss.prototype.constructor = Boss;
 
 function Boss(){
-    this.maxHealth = 5000; //5000
+    this.maxHealth = 1000; //5000
     this.health = this.maxHealth;
 
     this.setSprite("data/RoboHitler.json");
@@ -863,9 +863,18 @@ function Boss(){
     this.hitTimerID = -1;
     this.followFor = 0;
     this.punchDamage = 10;
+    this.waitingForGeorge = true;
 
     this.step = function () {//AI
         if(this.dead)return;
+        if(this.waitingForGeorge && Math.abs(george_char.x-this.x) < 300){
+            this.waitingForGeorge = false;
+            //taunt
+            UIManager.createBossBar();
+        }
+
+        //stay still while waiting for George to get close
+        if(this.waitingForGeorge) return;
 
         if(this.x<george_char.x){
             this.sprite.scale.x= -1;
@@ -966,11 +975,10 @@ function Boss(){
     };
 
     this.damage = function (amount) {
-        if(this.dead)return;
-        return;//lolool
-        console.log(this.health, amount);
+        if(this.dead || this.waitingForGeorge)return;
         this.health-=amount;
 
+        //dying
         if(this.health<=0){
             this.health = 0;
             this.die();
@@ -978,7 +986,8 @@ function Boss(){
         }
 
         return;
-        if(this.hitTimerID != -1)return;//mustache already red
+
+        /*if(this.hitTimerID != -1)return;//mustache already red
 
         this.sprite.skeleton.setSkinByName("Hit");
         this.sprite.skeleton.setSlotsToSetupPose();
@@ -994,7 +1003,7 @@ function Boss(){
             that.setSprite("data/RoboHitler.json");
             that.sprite.skeleton.setSkinByName("Normal");
             that.hitTimerID = -1;
-        }, 500);
+        }, 500);*/
 
 
     }
