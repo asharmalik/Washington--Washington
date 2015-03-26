@@ -1,5 +1,7 @@
 Boss fight:
 AI
+damage can be done but very small outside of mustache
+*make metal hit sounds louder and add to rest of body
 =====
 
 Effects:
@@ -10,7 +12,6 @@ different volume levels for metal ricochet depending on gun
 
 =============
 Etc:
-Add mute button
 Spine wrapper?
 bg disappeared for boss fight
 Add multiplayer mode

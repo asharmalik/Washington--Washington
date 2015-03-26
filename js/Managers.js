@@ -24,7 +24,6 @@ GameManager.toggleDebug = function () {
         MapManager.randomLength = 4000;//30000
         MapManager.bridgeFinaleLength = 1000;
         GameSounds.muteThemeSong = true;
-        GameSounds.mute();
         ZombiesManager.disabled = true;
     } else {
         ZombiesManager.disabled = false;
@@ -33,7 +32,6 @@ GameManager.toggleDebug = function () {
         george_char.jumpHeight = -16;
         GameSounds.muteThemeSong = false;
         stage.removeChild(fps_txt);
-        GameSounds.mute(); //unmute
     }
 };
 
@@ -60,8 +58,9 @@ GameManager.beginGame1 = function(){
     fps_txt = new PIXI.Text("FPS: x", {font:"12px Arial", fill:"white"});
 
     //GameManager.toggleDebug();
-
+    //GameSounds.mute();
     //MapManager.spawnBoss();
+
     requestAnimFrame(GameManager.stage1.step);
 };
 
@@ -127,10 +126,16 @@ GameManager.stage1.step = function () {
 
     //-----------------------------------
 
-    //toggle debug
-    if(Key.isDown(192)){//`
+    //toggle debug (`)
+    if(Key.isDown(192)){
         Key.forceUp(192);
         GameManager.toggleDebug();
+    }
+
+    //toggle mute (M)
+    if(Key.isDown(77)){
+        Key.forceUp(77);
+        GameSounds.mute();
     }
 
     if(!GameManager.paused) {
@@ -170,6 +175,8 @@ GameManager.stage1.simulateGravity = function () {
         }
     }
 };
+
+
 
 ZombiesManager.disabled = false;
 
@@ -269,6 +276,8 @@ ZombiesManager.reset = function(){
     this.currentTimerID = setTimeout(this.manageZombies, this.checkTime );
 };
 
+
+
 PlatformManager.reset = function(){
     PlatformManager.platforms = [];
     PlatformManager.charList = [];
@@ -278,6 +287,8 @@ PlatformManager.reset = function(){
 PlatformManager.addPlatform = function(x1, x2, y){
     PlatformManager.platforms.push(new platform(x1, x2, y));
 };
+
+
 
 MapManager.addToMap = function(item){
     MapManager.layer1.addChild(item);
@@ -572,7 +583,6 @@ MapManager.checkStopBridgeFinale = function () {
     }
 }
 
-
 MapManager.fadeInPrepForElevator = function (){ //fades layer3 and 4
     MapManager.layer2.alpha -= .1;//3, 4
     MapManager.layer3.alpha -= .1;//3, 4
@@ -795,6 +805,8 @@ MapManager.reset = function(){
     }
 };
 
+
+
 UIManager.updateGun = function () {
     if(this.expBar == null) return;
     if(this.expBar.gun != null){
@@ -830,6 +842,45 @@ UIManager.updateGun = function () {
 UIManager.refreshUI = function () {
     if(this.expBar == null)return;
     this.expBar.x = ScreenManager.stageWidth - 105;
+}
+
+UIManager.updateMuteButton = function () {
+    if(UIManager.unmuted){
+        UIManager.UI.removeChild(UIManager.unmuted);
+        UIManager.unmuted = null;
+    }
+    if(UIManager.muted){
+        UIManager.UI.removeChild(UIManager.muted);
+        UIManager.muted = null;
+    }
+
+    if(GameSounds.muted){
+        UIManager.muted = new PIXI.Sprite.fromFrame("mute2_btn.png");
+
+        UIManager.muted.x = 150;
+        UIManager.muted.y = 6;
+
+        UIManager.muted.alpha = 0.5;
+        UIManager.UI.addChild(this.muted);
+
+        UIManager.muted.interactive = true;
+        UIManager.muted.mouseup = UIManager.muted.touchend = function () {
+            GameSounds.mute();
+        }
+    }else{
+        UIManager.unmuted = new PIXI.Sprite.fromFrame("mute_btn.png");
+
+        UIManager.unmuted.x = 150;
+        UIManager.unmuted.y = 6;
+
+        UIManager.unmuted.alpha = 0.5;
+        UIManager.unmuted.interactive = true;
+        UIManager.unmuted.mouseup = UIManager.unmuted.touchend = function () {
+            GameSounds.mute();
+        }
+
+        UIManager.UI.addChild(this.unmuted);
+    }
 }
 
 UIManager.createUI = function () {
@@ -874,7 +925,6 @@ UIManager.createUI = function () {
     this.expBar.fill = new PIXI.Sprite.fromFrame("GunFill.png");
     this.expBar.gun = new PIXI.Sprite.fromFrame("MGun1.png");
     this.expBar.maskSprite = new PIXI.Graphics();
-    //this.expBar
 
     //build mask
     this.expBar.maskSprite.x = this.expBar.fill.x+33;
@@ -921,8 +971,10 @@ UIManager.createUI = function () {
 
     this.updateGun();
 
-
     this.UI.addChild(this.expBar);
+
+    //add mute/unmute icon
+    //UIManager.updateMuteButton();
 
     stage.addChild(this.UI);
 };
@@ -956,6 +1008,8 @@ UIManager.createBossBar = function () {
 
     stage.addChild(this.bossBar);
 };
+
+
 
 GameSounds.playSound = function (snd) {
     if(GameSounds.muted || GameSounds.forceMute || GameSounds.perc_loaded != 100)return;
@@ -1046,8 +1100,6 @@ GameSounds.init = function () {
             GameSounds.beginThemeSong();
         }
     });
-
-
 };
 
 GameSounds.mute = function () {
@@ -1059,6 +1111,8 @@ GameSounds.mute = function () {
         //begin theme song
         GameSounds.beginThemeSong();
     }
+
+    UIManager.updateMuteButton();
 };
 
 GameSounds.beginThemeSong = function () {
@@ -1066,6 +1120,8 @@ GameSounds.beginThemeSong = function () {
 
     GameSounds.theme.play();
 };
+
+
 
 ScreenManager.originalWidth = 704;
 ScreenManager.originalHeight = 440;

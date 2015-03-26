@@ -366,9 +366,6 @@ function George(){
             shooting.timer = setTimeout(shooting.fadeAlpha, 10);
         };
 
-        //shooting.timer = setTimeout(shooting.fadeAlpha, 50);
-
-
         setTimeout(function () {
             clearTimeout(shooting.timer);
             world.removeChild(shooting);
@@ -424,9 +421,15 @@ function George(){
 
         //hittest boss
         if(MapManager.hitler != null){//boss fight
-            if(this.y-MapManager.hitler.y>=-80 && ((george_char.sprite.scale.x == 1 && this.x<MapManager.hitler.x) || (george_char.sprite.scale.x == -1 && this.x>MapManager.hitler.x))){
-                if(MapManager.hitler.damage(this.gundmgs[this.gun])){ //only play sound if he is hurt
-                    GameSounds.playSound('metal');
+            if((george_char.sprite.scale.x == 1 && this.x<MapManager.hitler.x) || (george_char.sprite.scale.x == -1 && this.x>MapManager.hitler.x)){
+                if(this.y-MapManager.hitler.y>=-80) {
+                    if (MapManager.hitler.damage(this.gundmgs[this.gun])) { //only play sound if he is hurt
+                        GameSounds.playSound('metal');
+                    }
+                }else if(this.y-MapManager.hitler.y>=-280){
+                    if (MapManager.hitler.damage(0)) { //only play sound if he can be hurt
+                        GameSounds.playSound('metal');
+                    }
                 }
             }
         }
@@ -848,49 +851,89 @@ Boss.prototype = new base_char();
 Boss.prototype.constructor = Boss;
 
 function Boss(){
-    this.maxHealth = 1000; //5000
+    this.maxHealth = 1000; //TODO: 5000
     this.health = this.maxHealth;
 
     this.setSprite("data/RoboHitler.json");
     this.sprite.skeleton.setSkinByName("Normal");
     this.sprite.skeleton.setSlotsToSetupPose();
-    this.attacking = false;
-    this.state = 0;//0= idle, 1 = moving, 2 = aggressive
+    this.attacking = false;//TODO: rename
+    this.state = 0;//0 = taunt, 1 = punch, 2 = shoot
+    this.statePerc = [.1, .3, .6]; //weights of frequency
     this.stateTimer = -1;
     this.nextAttackID = -1;
     this.toX = 0;
-    this.speed = 3;
+    this.speed = 6;
     this.dead = false;
     this.hitTimerID = -1;
     this.punchDamage = 10;
     this.waitingForGeorge = true;
     this.gunDmg = 10;
+    this.shootDelay = 500;
 
+    this.decideState = function () {
+        var randNum = Math.random();
+
+        if(randNum<.1){
+            this.state = 0;
+        }else if(randNum<.45){
+            this.state = 1;
+        }else{
+            this.state = 2;
+        }
+
+        console.log(randNum, this.state);
+
+        var that = this;
+        setTimeout(function(){
+            that.decideState();
+        }, Math.random()*3000 + 2000); //redecide every 2 - 5 seconds
+    };
+    
     this.step = function () {//AI
         //MapManager.hitler.y = george_char.y; //unncessary
         if(this.dead)return;
+        //waiting for george to get close enough
         if(this.waitingForGeorge && Math.abs(george_char.x-this.x) < 300){
             this.waitingForGeorge = false;
-            //taunt
+
             this.taunt();
             UIManager.createBossBar();
+
+            var that = this;
+
+            this.decideState();
         }
 
         //stay still while waiting for George to get close
         if(this.waitingForGeorge) return;
 
-        if(this.x<george_char.x){
-            this.sprite.scale.x = -1;
-        }else{
-            this.sprite.scale.x = 1;
+        if(!this.attacking) {
+            //face george
+            if (this.x < george_char.x) {
+                this.sprite.scale.x = -1;
+            } else {
+                this.sprite.scale.x = 1;
+            }
+
+            //boss AI
+            if(this.state == 0){
+                this.taunt();
+            }
+            else if(this.state == 1){
+                if(Math.abs(this.x-george_char.x)<100){ // in range of attack
+                    this.punch();
+                }else{ //follow
+                    if(this.x<george_char.x){
+                        this.x+=this.speed;
+                    }else{
+                        this.x-=this.speed;
+                    }
+                }
+            }else{//state == 2
+                this.shoot();
+            }
         }
-
-        //boss AI
-        if(!this.attacking){
-            //this.shoot();
-        }
-
-
     };
 
     
@@ -900,13 +943,14 @@ function Boss(){
     };
 
     this.hitTestPunch = function () {
-        if(Math.abs(this.x-george_char.x)<200 && Math.abs(this.y-george_char.y)<180){
+        if(Math.abs(this.x-george_char.x)<200 && Math.abs(this.y-george_char.y)<100){
             george_char.hit(this.punchDamage);
             george_char.speedX = -this.sprite.scale.x*10;//knockback
         }
     };
     
     this.punch = function () {
+        if(this.attacking) return;
         this.sprite.state.setAnimationByName("Hit1");
         this.attacking = true;
 
@@ -925,6 +969,7 @@ function Boss(){
     };
     
     this.shoot = function () {
+        if(this.attacking) return;
         this.sprite.state.setAnimationByName("Hit2");
         this.attacking = true;
 
@@ -968,11 +1013,11 @@ function Boss(){
             that.attacking = false;
             that.idle();
 
-        }, this.sprite.state.current.duration*1000);
+        }, this.shootDelay);
     };
 
     this.taunt = function () {
-        console.log("taunting");
+        if(this.attacking) return;
         this.sprite.state.setAnimationByName("Taunt");
         this.attacking = true;
 
