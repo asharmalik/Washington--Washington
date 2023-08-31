@@ -6,6 +6,14 @@ var rendererOptions = {
     resolution: 1
 }
 
+document.body.style.display = 'flex';
+document.body.style.justifyContent = 'center';
+document.body.style.alignItems = 'center';
+
+document.body.style.height = '100vh';
+document.body.style.margin = '0';
+
+
 // create a renderer instance
 var renderer = new PIXI.autoDetectRenderer(ScreenManager.stageWidth, ScreenManager.stageHeight, rendererOptions);
 renderer.view.style.display = "block";
@@ -88,9 +96,3 @@ function update_loader(){
 
     requestAnimationFrame(update_loader);
 }
-
-
-
-// george_char.sprite.skeleton.setSkin()
-//george_char.sprite.skeleton.bones[2].name
-//george_char.sprite.skeleton.findBone("Head").rotation
